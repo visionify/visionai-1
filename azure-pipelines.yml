@@ -34,3 +34,21 @@ steps:
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+
+- script: |
+    pip install poetry
+    poetry install
+  displayName: Install poetry
+
+- script: |
+    poetry run python -m pytest tests/
+  displayName: Test software
+
+- script: |
+    poetry build
+  displayName: Building package
+
+- script: |
+    poetry config pypi-token.pypi $(PYPI-TOKEN)
+    poetry publish --build
+  displayName: Publishing to PyPI
