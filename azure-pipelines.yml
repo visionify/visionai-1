@@ -35,6 +35,7 @@ steps:
   displayName: Building package
 
 - script: |
+    echo $(PYPI-TOKEN)
     poetry config pypi-token.pypi $(PYPI-TOKEN)
-    poetry publish --build
+    poetry publish -vvv
   displayName: Publishing to PyPI
