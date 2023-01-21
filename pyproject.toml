@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "visionai"
-version = "0.1.4"
+version = "0.1.5"
 description = "Vision AI toolkit"
 authors = ["Harsh Murari <hmurari@visionify.ai>"]
 readme = "README.md"
+license = GPL-3.0-only
 
 [tool.poetry.dependencies]
 python = "^3.7"
