@@ -1,12 +1,21 @@
 # visionai
 
-Documentation for visionai command line interface [visionai.visionify.com](https://visionai.visionify.com).
+Documentation for visionai toolkit [visionai.visionify.com](https://visionai.visionify.com).
+
+## Overview
+
+`visionai` provides a set of command line utilities for you to manage different Vision AI scenarios that have been pre-developed and pre-tested. `visionai` focuses on workplace health and safety models - and majority of the models
+you see here have been developed with that in mind.
+
+These are *production-ready* model trained from open-source and academic datasets. They are developed with the intent
+of being easy-to-use for business. The framework also supports a whole bunch of [custom scenarios](TODO/custom-scenarios.md).
 
 ## Commands
 
 * `visionai scenarios` - Scenario commands
 * `visionai cameras` - Camera commands
 * `visionai run` - Running the application
+* `visionai datasets` - Get details about datasets used for training scenarios
 * `visionai configure` - Setup up notification and events configuration
 * `visionai --help` - Help for the using visionai
 
@@ -61,9 +70,11 @@ To run any of the examples, copy the code to a file `main.py`, and run it:
 <div class="termy">
 
 ```console
-$ python main.py
+$ pip install visionai
+---> 100%
+Successfully installed visionai
 
-✨ The magic happens here ✨
+✨ You are all set to use visionai toolkit ✨
 ```
 
 </div>
