@@ -1,0 +1,45 @@
+version: "3.0"
+
+services:
+  server:
+    env_file:
+      - .env
+    image: python:3.9
+    working_dir: /mnt
+    volumes:
+      - .:/mnt
+    ports:
+      - 3000:3000
+    # expose:
+    #   - 3000
+    command: python server.py
+
+  testserver:
+    env_file: .env
+    image: python:3.9
+    working_dir: /mnt
+    volumes:
+      - .:/mnt
+    depends_on:
+      - server
+    ports:
+      - 5053:5053
+    environment:
+      APPLICATION_PORT: 5053
+    command: python -m pytest test/
+
+  cli:
+    env_file: .env
+    image: python:3.9
+    volumes:
+      - ./cli:/mnt
+    working_dir: /mnt
+    # ports:
+    #   - 3000
+    depends_on:
+      - server
+    links:
+      - server
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
