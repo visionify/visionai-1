@@ -21,12 +21,8 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pytest
-  displayName: 'pytest'
-
-- script: |
     pip install poetry
+    cat requirements.txt | xargs poetry add
     poetry install
   displayName: Install poetry
 
