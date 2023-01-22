@@ -8,8 +8,24 @@ theme:
   font:
     text: Open Sans
   palette:
-    primary: black
-    accent: teal
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
   icon:
     repo: fontawesome/brands/github-alt
   logo: img/icon-white.svg
@@ -116,11 +132,7 @@ nav:
 markdown_extensions:
   - toc:
       permalink: true
-  - markdown.extensions.codehilite:
-      guess_lang: false
   - admonition
-  - codehilite
-  - extra
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -133,6 +145,20 @@ extra:
   analytics:
     provider: google
     property: G-3CWR3GL7BF
+    feedback:
+      title: Was this page helpful?
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: This page was helpful
+          data: 1
+          note: >-
+            Thanks for your feedback!
+        - icon: material/emoticon-sad-outline
+          name: This page could be improved
+          data: 0
+          note: >-
+            Thanks for your feedback! Help us improve this page by
+            using our <a href="https://docs.google.com/forms/d/e/1FAIpQLSfW7NsiBv1KCH8enZ7OJDHdQDhqY8NtUeQElm9gnRRR9pLPbw/viewform?usp=sf_link" target="_blank" rel="noopener">feedback form</a>.
   social:
     - icon: fontawesome/brands/github-alt
       link: https://github.com/visionify/visionai
@@ -149,6 +175,7 @@ extra:
     - icon: fontawesome/brands/linkedin-in
       link: https://www.linkedin.com/company/visionify-ai/
 
+
 extra_css:
   - css/termynal.css
   - css/custom.css
@@ -157,3 +184,4 @@ extra_javascript:
   - https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js
   - js/termynal.js
   - js/custom.js
+
