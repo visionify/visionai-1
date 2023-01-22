@@ -12,21 +12,30 @@ def pipeline_create(
     Create a named pipeline
 
     Create a named pipeline. Pipeline is a list of scenarios
-    to be run for specific cameras. The flow is as follows:
+    to be run for specific cameras. The flow is as follows. Create
+    a pipeline using:
 
-    ```
     visionai pipeline create --name test_pipe
+
     visionai pipeline add-scenario --pipeline test_pipe  --name smoke-and-fire
+
     visionai pipeline add-scenario --pipeline test_pipe  --name ppe-detection
+
     visionai pipeline add-preprocess --pipeline test_pipe  --name face-blur
+
     visionai pipeline add-preprocess --pipeline test_pipe  --name text-blur
+
     visionai pipeline add-scenario --pipeline test_pipe  --name max-occupancy
+
     visionai pipeline show --pipeline test_pipe
+
     visionai pipeline add-camera --pipeline test_pipe  --name CAMERA-01
+
     visionai pipeline add-camera --pipeline test_pipe  --name CAMERA-02
+
     visionai pipeline show --pipeline test_pipe
+
     visionai pipeline run --pipeline test_pipe
-    ```
 
     @arg pipeline - specify a named pipeline
 
@@ -47,12 +56,11 @@ def pipeline_add_scenario(
     are run in different threads. All scenarios are run after
     pre-processing stage is done.
 
-    ```
-    Ex:
-    visionai pipeline --name test_pipe add-scenario --name smoke-and-fire
-    visionai pipeline --name test_pipe add-scenario --name ppe-detection
-    visionai pipeline --name test_pipe run
-    ```
+    $visionai pipeline --name test_pipe add-scenario --name smoke-and-fire
+
+    $visionai pipeline --name test_pipe add-scenario --name ppe-detection
+
+    $visionai pipeline --name test_pipe run
 
     @arg pipeline - specify a named pipeline
     @arg scenario - specify name of the scenario to run
@@ -74,13 +82,13 @@ def pipeline_add_preprocess(
     multiple preprocess tasks are added does not matter. All added preprocess
     routines are executed in different threads.
 
-    ```
-    Ex:
-    visionai pipeline --name test_pipe add-preprocess --name face-blur
-    visionai pipeline --name test_pipe add-preprocess --name text-blur
-    visionai pipeline --name test_pipe show
-    visionai pipeline --name test_pipe run
-    ```
+    $ visionai pipeline --name test_pipe add-preprocess --name face-blur
+
+    $ visionai pipeline --name test_pipe add-preprocess --name text-blur
+
+    $ visionai pipeline --name test_pipe show
+
+    $ visionai pipeline --name test_pipe run
 
     @arg pipeline - specify a named pipeline
     @arg preprocess - specify name of the preprocess task to run
@@ -104,13 +112,11 @@ def pipeline_add_camera(
     to a pipeline. Please note the camera instance has to be
     created prior to adding it here.
 
-    ```
     # add a camera
-    visionai camera add --name OFFICE-01 --uri https://youtube.com
+    $ visionai camera add --name OFFICE-01 --uri https://youtube.com
 
     # add camera to pipeline
-    visionai pipeline --name test_pipe add-camera --name OFFICE-01
-    ```
+    $ visionai pipeline --name test_pipe add-camera --name OFFICE-01
 
     @arg pipeline - specify a named pipeline
     @arg camera - specify name of the camera to add
@@ -129,10 +135,7 @@ def pipeline_remove_camera(
 
     This method can be used to remove a camera from a pipeline.
 
-    ```
-    # remove camera from pipeline
-    visionai pipeline --name test_pipe remove-camera --name OFFICE-01
-    ```
+    $ visionai pipeline --name test_pipe remove-camera --name OFFICE-01
 
     @arg pipeline - specify a named pipeline
     @arg camera - specify name of the camera to remove
@@ -153,10 +156,7 @@ def pipeline_reset(
     from the pipeline. Its as if the pipeline has been deleted
     and created from scratch again.
 
-    ```
-    # Reset the pipeline
-    visionai pipeline --name test_pipe reset
-    ```
+    $ visionai pipeline --name test_pipe reset
 
     @arg pipeline - pipeline to reset
 
@@ -175,10 +175,7 @@ def pipeline_show(
 
     Show what is configured in the current pipeline.
 
-    ```
-    Ex:
-    visionai pipeline --name test_pipe show
-    ```
+    $ visionai pipeline --name test_pipe show
 
     @arg pipeline - specify a named pipeline
 

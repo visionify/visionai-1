@@ -36,29 +36,21 @@ def app_callback():
     built using latest computer vision frameworks. Supports many of the
     common workplace health and safety use-cases.
 
-    Start by exploring scenarios
-    ```
-    visionai scenario list
-    visionai scenario <scenario-name> details
-    ```
+    Start by exploring scenarios through visionai scenario list command.
+    After that, you can create a pipeline through the pipeline commands.
+    Once a pipeline is configured, you can run the pipeline on the
+    any number of cameras.
 
-    VisionAI toolkit also supports running multiple scenarios or a sequence
-    of scenarios. Run scenarios on multiple IP cameras in through
-    `visionai run` command.
+    Running the toolkit does assume a NVIDIA GPU powered machine for
+    efficient performance. Please see the system requirements on the
+    documentation.
 
-    Following are the sub-commands supported. You can get more
-    details about each of the scenarios using `visionai <command> --help`
+    You can instead opt to install it through Azure Managed VM, with
+    preconfigured machines & recommended hardware support. You can
+    find information about this on our documentation website.
 
-    ```
-    visionai scenario       -- Listing scenarios, categories, tags & detailsListing details of a scenario
-    visionai camera         -- Add/remove named camera streams.
-    visionai pipelin3       -- Configure and run pipelines
-    visionai device         -- Device stats (GPU/Memory)
-    visionai web            -- Start/stop web-service to manage this
-    visionai auth           -- Login/logout through API token for private models
-    ```
+    Visit https://docs.visionify.ai for more details.
     '''
-
 
 if __name__ == "__main__":
     app()

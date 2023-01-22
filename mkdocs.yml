@@ -83,7 +83,29 @@ nav:
     - Using Click: tutorial/using-click.md
     - Building a Package: tutorial/package.md
     - Exceptions: tutorial/exceptions.md
-  - Features: features.md
+  - Scenarios:
+    - Overview: scenarios/index.md
+    - Personnel Health:
+      - PPE Detection: scenarios/ppe-detection.md
+      - Working at heights: scenarios/working-at-heights.md
+      - Slip and fall: scenarios/slip-and-fall.md
+      - Confined spaces: scenarios/confined-spaces-dwell-duration-monitoring.md
+      - Smoke and Fire: scenarios/smoke-and-fire-detection.md
+      - Ergonomics: scenarios/posture-and-ergonomics.md
+    - Company Policies:
+      - Max Occupancy: scenarios/max-occupancy-count.md
+      - Shipping activity: scenarios/shipping-activity.md
+      - Unauthorized entry: scenarios/unauthorized-entry.md
+      - No mobile usage: scenarios/no-phone-usage.md
+      - No visitors: scenarios/no-visitors.md
+      - No pictures: scenarios/no-taking-pictures.md
+      - Occupancy: scenarios/person-occupancy.md
+      - No food allowed: scenarios/no-food-allowed.md
+      - No children: scenarios/no-children.md
+    - Privacy:
+      - Blur faces: preprocess/blur-faces.md
+      - Blur signs/text: preprocess/blur-signs.md
+      - Blur screens: preprocess/blur-screens.md
   - Typer CLI: typer-cli.md
   - Alternatives: alternatives.md
   - Help: help-typer.md
