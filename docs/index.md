@@ -1,6 +1,6 @@
 # VisionAI
 
-Documentation for VisionAI toolkit [visionai.visionify.com](https://visionai.visionify.com).
+Documentation for VisionAI toolkit.
 
 ## Overview
 
@@ -132,7 +132,9 @@ Starting early-smoke-and-fire-detection
 
 </div>
 
-## **Next** steps
+## Next **steps**
 
 Congratulations! You have successfully run the first scenario. Now go through [Tutorials](tutorials/index.md) to learn about how to run multiple scnearios, how to configure each scenario for the events you need, how to set up the dependencies etc.
+
+Or you can also go through our [scenarios](scenarios/index.md) page to explore the different scenarios available and their model details. If you have a need for a scenario to be implemented, do not hesitate to submit a [request](https://github.com/visionify/visionai/issues).
 

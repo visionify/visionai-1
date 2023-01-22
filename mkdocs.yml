@@ -17,8 +17,8 @@ theme:
   features:
     - navigation.tabs
 
-repo_name: tiangolo/typer
-repo_url: https://github.com/tiangolo/typer
+repo_name: visionify/visionai
+repo_url: https://github.com/visionify/visionai
 edit_uri: ""
 
 nav:
@@ -110,20 +110,20 @@ markdown_extensions:
 extra:
   analytics:
     provider: google
-    property: UA-133183413-1
+    property: G-3CWR3GL7BF
   social:
     - icon: fontawesome/brands/github-alt
-      link: https://github.com/tiangolo/typer
+      link: https://github.com/visionify/visionai
     - icon: fontawesome/brands/twitter
-      link: https://twitter.com/tiangolo
+      link: https://twitter.com/visionify
     - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/tiangolo
+      link: https://www.linkedin.com/in/hmurari
     - icon: fontawesome/brands/dev
-      link: https://dev.to/tiangolo
+      link: https://dev.to/hmurari
     - icon: fontawesome/brands/medium
-      link: https://medium.com/@tiangolo
+      link: https://medium.com/@hmurari
     - icon: fontawesome/solid/globe
-      link: https://tiangolo.com
+      link: https://visionify.ai
 
 extra_css:
   - css/termynal.css
