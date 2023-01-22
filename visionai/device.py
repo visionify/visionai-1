@@ -42,5 +42,19 @@ def device_gpu_mem_stats():
     '''
     print('Getting gpu/mem stats')
 
+
+@device_app.callback()
+def callback():
+    '''
+    Manage device features
+
+    Since scenarios run on individual edge-devices, and we don't
+    have enough control over the CPU, Memory, GPU statistics - it is
+    imperative that we have strong methods for validating if a scenario
+    can run on a chosen platform. This module provides many utilities
+    to check CPU, Memory and GPU statistics for the edge device. We also
+    provide an Azure Managed service where these scenarios can be
+    configured and run on your premise on pre-validated VM machines.
+   '''
 if __name__ == '__main__':
     device_app()

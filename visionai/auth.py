@@ -1,5 +1,7 @@
 import typer
 import time
+from rich import print
+
 
 # Auth app
 auth_app = typer.Typer()

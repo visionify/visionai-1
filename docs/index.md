@@ -4,13 +4,13 @@ Documentation for VisionAI toolkit.
 
 ## Overview
 
-`VisionAI` provides a set of command line utilities for you to manage different Vision AI scenarios that have been pre-developed and pre-tested. `VisionAI` focuses on workplace health and safety models - and majority of the models you see here have been developed with that in mind.
+**VisionAI** provides a set of command line utilities for you to manage different Vision AI scenarios that have been pre-developed and pre-tested. **VisionAI** focuses on workplace health and safety models - and majority of the models you see here have been developed with that in mind.
 
 These are *production-ready* model trained from open-source and academic datasets. We are continuously working on new scenarios - and our current scenario repo consists of over 60 scenarios that are listed [here](scenarios/index.md). They are developed with the intent of being easy-to-use for business. The framework also supports a whole bunch of [custom scenarios](TODO/custom-scenarios.md).
 
 ## Install **VisionAI**
 
-Install VisionAI application through `PyPI`. There are other options available for install - including a Docker container option. These are detailed in [installation](TODO/install.md) section.
+Install **VisionAI** application through `PyPI`. There are other options available for install - including a Docker container option. These are detailed in [installation](TODO/install.md) section.
 
 <div class="termy">
 
@@ -24,11 +24,19 @@ Successfully installed visionai
 
 </div>
 
+## Deploy to **Azure**
+
+Deploy a fully configured and tested solution directly from Azure Marketplace. **VisionAI** runs computer vision models, most of which run orders of magnitude faster if executed on a GPU machine. Our Azure Marketplace offer **VisionAI Community Edition** is available through Azure Marketplace [here](https://azure.microsoft.com) (TODO). The community edition deploys a fully configured Virtual Machine with the recommended hardware and software options. Get more details [here](azure/installation.md).
+
+![Deploy to Azure](https://aka.ms/deploytoazurebutton)
+
+- TODO: Point to ARM template that needs to be deployed (using these [instructions](https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-to-azure-button) and here is an example [JSON file](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.storage/storage-account-create/azuredeploy.json)).
+
 ## List available **Scenarios**
 
 **VisionAI** is organized in terms of scenarios. Consider each scenario as being a business use-case, that is solved by a combination of Machine Learning models and an inference algorithm. For example *Warn me when max occupancy of this area exceeds 80 people* is a business scenario, where as the *People detection* is an ML model.
 
-VisionAI supports 60 scenarios currently and more are being added continuously. Our current focus is on Workplace Safety scenarios. Please [contact us](contact.md) if a scenario you need is not present in our repo and we will look into it.
+**VisionAI** supports 60 scenarios currently and more are being added continuously. Our current focus is on Workplace Safety scenarios. Please [contact us](contact.md) if a scenario you need is not present in our repo and we will look into it.
 
 <div class="termy">
 

@@ -1,5 +1,7 @@
 import typer
 import time
+from rich import print
+
 from rich.progress import track
 
 camera_app = typer.Typer()

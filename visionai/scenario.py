@@ -1,4 +1,5 @@
 import typer
+from rich import print
 
 scenario_app = typer.Typer()
 
@@ -18,6 +19,16 @@ def scenario_add(scenario: str):
 def scenario_remove(scenario: str):
     print(f'Removing scenario : {scenario}')
 
+
+@scenario_app.callback()
+def callback():
+    '''
+    Manage scenarios
+
+    Browse scenarios. Get details of a scenario. Get list
+    of scenarios available for a tag or category. Get model
+    details for a scenario.
+   '''
 
 
 if __name__ == '__main__':

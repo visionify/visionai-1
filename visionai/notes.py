@@ -1,4 +1,5 @@
 import typer
+from rich import print
 from typing import Optional
 from pathlib import Path
 
