@@ -1,71 +1,16 @@
-# visionai
+# VisionAI
 
-Documentation for visionai toolkit [visionai.visionify.com](https://visionai.visionify.com).
+Documentation for VisionAI toolkit [visionai.visionify.com](https://visionai.visionify.com).
 
 ## Overview
 
-`visionai` provides a set of command line utilities for you to manage different Vision AI scenarios that have been pre-developed and pre-tested. `visionai` focuses on workplace health and safety models - and majority of the models
-you see here have been developed with that in mind.
+`VisionAI` provides a set of command line utilities for you to manage different Vision AI scenarios that have been pre-developed and pre-tested. `VisionAI` focuses on workplace health and safety models - and majority of the models you see here have been developed with that in mind.
 
-These are *production-ready* model trained from open-source and academic datasets. They are developed with the intent
-of being easy-to-use for business. The framework also supports a whole bunch of [custom scenarios](TODO/custom-scenarios.md).
+These are *production-ready* model trained from open-source and academic datasets. We are continuously working on new scenarios - and our current scenario repo consists of over 60 scenarios that are listed [here](scenarios/index.md). They are developed with the intent of being easy-to-use for business. The framework also supports a whole bunch of [custom scenarios](TODO/custom-scenarios.md).
 
-## Commands
+## Install **VisionAI**
 
-* `visionai scenarios` - Scenario commands
-* `visionai cameras` - Camera commands
-* `visionai run` - Running the application
-* `visionai datasets` - Get details about datasets used for training scenarios
-* `visionai configure` - Setup up notification and events configuration
-* `visionai --help` - Help for the using visionai
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
-
-## Python types
-
-If you need a refresher about how to use Python type hints, check the first part of <a href="https://fastapi.tiangolo.com/python-types/" class="external-link" target="_blank">FastAPI's Python types intro</a>.
-
-You can also check the <a href="https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html" class="external-link" target="_blank">mypy cheat sheet</a>.
-
-In short (very short), you can declare a function with parameters like:
-
-```Python
-from typing import Optional
-
-def type_example(name: str, formal: bool = False, intro: Optional[str] = None):
-    pass
-```
-
-And your editor (and **Typer**) will know that:
-
-* `name` is of type `str` and is a required parameter.
-* `formal` is a `bool` and is by default `False`.
-* `intro` is an optional `str`, by default is `None`.
-
-These type hints are what give you autocomplete in your editor and several other features.
-
-**Typer** is based on these type hints.
-
-## Intro
-
-This tutorial shows you how to use **Typer** with all its features, step by step.
-
-Each section gradually builds on the previous ones, but it's structured to separate topics, so that you can go directly to any specific one to solve your specific CLI needs.
-
-It is also built to work as a future reference.
-
-So you can come back and see exactly what you need.
-
-## Run the code
-
-All the code blocks can be copied and used directly (they are tested Python files).
-
-To run any of the examples, copy the code to a file `main.py`, and run it:
+Install VisionAI application through `PyPI`. There are other options available for install - including a Docker container option. These are detailed in [installation](TODO/install.md) section.
 
 <div class="termy">
 
@@ -79,30 +24,115 @@ Successfully installed visionai
 
 </div>
 
-It is **HIGHLY encouraged** that you write or copy the code, edit it and run it locally.
+## List available **Scenarios**
 
-Using it in your editor is what really shows you the benefits of **Typer**, seeing how little code you have to write, all the type checks, autocompletion, etc.
+**VisionAI** is organized in terms of scenarios. Consider each scenario as being a business use-case, that is solved by a combination of Machine Learning models and an inference algorithm. For example *Warn me when max occupancy of this area exceeds 80 people* is a business scenario, where as the *People detection* is an ML model.
 
-And running the examples is what will really help you understand what is going on.
-
-You can learn a lot more by running some examples and playing around with them than by reading all the docs here.
-
----
-
-## Install **Typer**
-
-The first step is to install **Typer**.
-
-For the tutorial, you might want to install it with all the optional dependencies and features:
+VisionAI supports 60 scenarios currently and more are being added continuously. Our current focus is on Workplace Safety scenarios. Please [contact us](contact.md) if a scenario you need is not present in our repo and we will look into it.
 
 <div class="termy">
 
 ```console
-$ pip install "typer[all]"
----> 100%
-Successfully installed typer click shellingham rich
+$ visionai scenarios list
+
+------------------------------------------------
+Privacy Suite
+blur-faces
+blur-text
+
+Fire safety
+early-smoke-and-fire-detection
+smoking-and-vaping-detection
+
+Personnel safety
+ppe-detection
+pfas-system-detection
+railings-detection
+
+Suspicious activity
+shipping-activity-detection
+agressive-behaivior
+
+
+Compliance Policies
+max-occupancy
+
+Equipment
+rust-and-corrosion-detection
+
+IR Camera
+temperature-monitoring
+------------------------------------------------
+
+✨ More scenarios are added regularly ✨
 ```
 
 </div>
 
-...that also includes `rich` and `shellingham`.
+
+## Get details for a **Scenario**
+
+You can get details about a scenario using `visionai scenario details` command. Specify the scenario you want additional details for. The details of a scenario include the dataset size, model accuracy metrics,
+
+<div class="termy">
+
+```console
+$ visionai scenario --name early-smoke-and-fire-detection details
+
+------------------------------------------------
+Category: Fire safety
+Scenario: early-smoke-and-fire-detection
+This scenario has been trained on open-source datasets consisting of 126,293 images. The datasets images are primarily outdoors (70%), but do contain a good number of indoor images (30%). There is a ~50-50% mix of day vs night images. You can find more details about this scenario at visionify.ai/early-smoke-and-fire-detection.
+
+
+Model: smoke-and-fire-detection-1.0.1.pt
+Model size: 127MB
+Model type: Object Detection
+Framework: PyTorch
+
+Model performance:
+Dataset size: 126,293 images
+Accuracy: 94.1%
+Recall: 93%
+F1-Score: 93.5%
+
+Events:
+smoke-detected  | Immediate
+fire-detected   | Immediate
+
+Event examples:
+{
+    "scenario": "smoke-and-fire-detection",
+    "event_name": "smoke-detected",
+    "event_details": {
+        "camera": "camera-01",
+        "date": "2023-01-04 11:05:02",
+        "confidence": 0.92
+    }
+}
+------------------------------------------------
+
+```
+
+</div>
+
+## Run a **Scenario**
+
+Use `visionai run` command to run a scenario. In its simplest sense, you can run a single scenario on your web-cam. In a more complex use-case, you can specify a pipeline of scenarios, configure notification logic for each scenario, timings for each scenario etc.
+
+<div class="termy">
+
+```console
+$ visionai run --scenario early-smoke-and-fire-detection --camera OFFICE-01
+
+Starting early-smoke-and-fire-detection
+...
+
+```
+
+</div>
+
+## **Next** steps
+
+Congratulations! You have successfully run the first scenario. Now go through [Tutorials](tutorials/index.md) to learn about how to run multiple scnearios, how to configure each scenario for the events you need, how to set up the dependencies etc.
+

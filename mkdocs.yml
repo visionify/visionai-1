@@ -1,10 +1,12 @@
-site_name: Typer
-site_description: Typer, build great CLIs. Easy to code. Based on Python type hints.
-site_url: https://typer.tiangolo.com/
+site_name: VisionAI
+site_description: VisionAI Toolkit - Ready to use models & vision apps
+site_url: https://docs.visionify.ai/
 
 theme:
   name: material
   custom_dir: docs/overrides
+  font:
+    text: Open Sans
   palette:
     primary: black
     accent: teal
@@ -20,10 +22,10 @@ repo_url: https://github.com/tiangolo/typer
 edit_uri: ""
 
 nav:
-  - Typer: index.md
+  - VisionAI: index.md
   - Features: features.md
-  - Tutorial - User Guide:
-      - Tutorial - User Guide - Intro: tutorial/index.md
+  - Tutorial:
+      - Introduction: tutorial/index.md
       - First Steps: tutorial/first-steps.md
       - Printing and Colors: tutorial/printing.md
       - Terminating: tutorial/terminating.md
@@ -87,6 +89,7 @@ nav:
   - Help: help-typer.md
   - Developers: contributing.md
   - About: release-notes.md
+  - Changelog: changelog/index.md
 
 markdown_extensions:
   - toc:
