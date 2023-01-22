@@ -32,6 +32,9 @@ theme:
   favicon: img/favicon.png
   features:
     - navigation.tabs
+    - navigation.instant
+    - navigation.footer
+    - navigation.tabs.sticky
 
 repo_name: visionify/visionai
 repo_url: https://github.com/visionify/visionai
