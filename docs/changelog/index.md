@@ -2,6 +2,10 @@
 
 ## VisionAI Changelog
 
+### **0.1.7** <small>January 20, 2023</small>
+
+- Implemented camera add/delete functionality
+
 ### **0.1.6** <small>January 20, 2023</small>
 
 - Implemented initial set of commands in different files (dummy implementation)
