@@ -37,7 +37,7 @@ def scenario_all():
 
 @scenario_app.command('list')
 def scenario_list(
-    camera = typer.Option(None, help="Camera name", prompt=True)
+    camera = typer.Option(None, help="Camera name")
 ):
     '''
     List scenarios configured for a camera

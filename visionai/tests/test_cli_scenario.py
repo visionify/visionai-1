@@ -88,8 +88,29 @@ class TestInvoke(unittest.TestCase):
         # remove camera
         output = invoke_cmd('python main.py scenario remove --name TEST-999')
 
+    @WorkingDirectory(ROOT)
+    def test_list_all_scenarios(self):
+        # list scenario
+        output = invoke_cmd('python main.py scenario list-all')
+        assert 'Detect early signs of' in output
+        assert 'ppe-detection' in output
+        assert 'model_url' in output
+        assert 'categories' in output
+        assert 'tags' in output
+        assert 'metrics' in output
+        assert 'datasetSize' in output
 
-
+    @WorkingDirectory(ROOT)
+    def test_list_no_camera_list_all_scenarios(self):
+        # list scenario
+        output = invoke_cmd('python main.py scenario list')
+        assert 'Detect early signs of' in output
+        assert 'ppe-detection' in output
+        assert 'model_url' in output
+        assert 'categories' in output
+        assert 'tags' in output
+        assert 'metrics' in output
+        assert 'datasetSize' in output
 
 if __name__ == '__main__':
     unittest.main()
