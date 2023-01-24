@@ -102,7 +102,7 @@ def scenario_add(
 
             if scen_already_present is False:
                 cam['scenarios'].append({
-                    'name': 'scenario',
+                    'name': scenario,
                     'events': 'all',
                     'schedule': 'all',
                     'focus': 'all'
@@ -124,7 +124,10 @@ def scenario_add(
 
 
 @scenario_app.command('remove')
-def scenario_remove(name: str=typer.Option('scenario name', prompt=True, confirmation_prompt=True)):
+def scenario_remove(
+    scenario: str=typer.Option(..., help='scenario name', prompt=True),
+    camera: str=typer.Option(..., help='camera', prompt=True)
+    ):
     '''
     Remove a scenario from the system
 
@@ -133,7 +136,7 @@ def scenario_remove(name: str=typer.Option('scenario name', prompt=True, confirm
     routines associated with the scenario will be removed.
     '''
 
-    print(f'Removing scenario : {name}')
+    print(f'Removing scenario : {scenario} from camera {camera}')
     if not os.path.exists(CONFIG_FILE):
         print('No scenarios available in the system. Exiting.')
         return
@@ -143,20 +146,21 @@ def scenario_remove(name: str=typer.Option('scenario name', prompt=True, confirm
 
     # Check if name already present
     found = False
-    for scenario in config_data['scenarios']:
-        if scenario['name'] == name:
-            found = True
-            config_data['scenarios'].remove(scenario)
-            break
+    for cam in config_data['cameras']:
+        for scen in cam['scenarios']:
+            if scen['name'] == scenario:
+                found = True
+                cam['scenarios'].remove(scen)
+                break
 
     if found:
         # Write back to JSON if successfully removed.
         with open(CONFIG_FILE, 'w') as f:
             json.dump(config_data, f, indent=4)
 
-        print(f'Successfully removed scenario: {name}')
+        print(f'Successfully removed scenario: {scenario} from {camera}')
     else:
-        print(f'Unable to find scenario {name} to remove')
+        print(f'Unable to remove scenario {scenario} from {camera}')
 
 
 @scenario_app.command('preview')
@@ -187,3 +191,5 @@ def callback():
 
 if __name__ == '__main__':
     scenario_app()
+
+    # scenario_remove('smoke-and-fire-detection', 'TEST-999')

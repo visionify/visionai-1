@@ -119,7 +119,7 @@ def camera_remove(name: str=typer.Option('Camera name', prompt=True, confirmatio
     if found:
         # Write back to JSON if successfully removed.
         with open(CONFIG_FILE, 'w') as f:
-            json.dump(config_data, f, indent=2)
+            json.dump(config_data, f, indent=4)
 
         print(f'Successfully removed camera: {name}')
     else:
@@ -153,4 +153,6 @@ def callback():
     '''
 
 if __name__ == '__main__':
-    camera_app()
+    # camera_app()
+
+    camera_remove('TEST-999')
