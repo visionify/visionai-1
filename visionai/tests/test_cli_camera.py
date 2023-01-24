@@ -37,12 +37,10 @@ class TestInvoke(unittest.TestCase):
         assert '--help' in output
 
     @WorkingDirectory(ROOT)
-    def test_invoke_camera_add(self):
+    def test_invoke_camera_add_remove(self):
         output = invoke_cmd('python main.py camera add --name TEST-999 --uri youtube.com --description "Test camera"')
         assert 'Success' in output
 
-    @WorkingDirectory(ROOT)
-    def test_invoke_camera_remove(self):
         output = invoke_cmd('python main.py camera remove --name TEST-999')
         assert 'Success' in output
 
