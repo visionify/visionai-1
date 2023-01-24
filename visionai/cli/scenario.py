@@ -7,18 +7,19 @@ from uuid import uuid4
 from rich import print
 from rich.progress import track
 from pathlib import Path
+import requests
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # visionai/visionai directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
-from config import CONFIG_FILE, SCENARIOS_SCHEMA
+from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
 
 scenario_app = typer.Typer()
 
 # scenario app
-@scenario_app.command('list')
+@scenario_app.command('list-all')
 def scenario_all():
     '''
     List all scenarios available
@@ -26,12 +27,13 @@ def scenario_all():
     List all scenarios available in the system. This includes scenarios
     that may or maynot be applied to any specific camera.
     '''
-    # TODO get the scenario from API
-    # res = requests.get('/scenarios')
-    print('Listing all scenarios available:')
-    with open(SCENARIOS_SCHEMA, 'r') as f:
-        data = json.load(f)
-    print(data['scenarios'])
+    try:
+        res = requests.get(SCENARIOS_URL)
+        scenarios = res.json()['scenarios']
+    except Exception as ex:
+        scenarios = str(ex)
+
+    print(scenarios)
 
 @scenario_app.command('list')
 def scenario_list(
@@ -61,7 +63,7 @@ def scenario_list(
 
     else:
         print(f'Listing all available scenarios')
-        print(scenario_all())
+        scenario_all()
 
 
 

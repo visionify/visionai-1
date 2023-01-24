@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "visionai"
-version = "0.1.8"
+version = "0.1.9"
 description = "Vision AI toolkit"
 authors = ["Harsh Murari <hmurari@visionify.ai>"]
 readme = "README.md"
@@ -18,3 +18,8 @@ visionai = "visionai.main:app"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[project.urls]
+homepage = "https://github.com/visionify/visionai"
+documentation = "https://docs.visionify.com"
+repository = "https://github.com/visionify/visionai"

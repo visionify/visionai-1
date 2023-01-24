@@ -1,8 +1,8 @@
-# Camera module
+# CLI modules
 
-Implementation of camera module
+Implementation of CLI modules module
 
-## Exported methods
+## Camera
 
 Camera module needs to provide support for the following methods:
 - Add a camera as a named instance in the system.
@@ -20,6 +20,25 @@ Camera module needs to provide support for the following methods:
 
 - List all the cameras in the system
     - Along with their FPS, description etc.
+
+## Scenario Module
+
+Scenario module needs to provide support for the following methods:
+- Listing all scenarios configured for a camera
+- Listing all publicly available scenarios
+- Listing details about a single scenario
+- Add a scenario to a camera
+    - Take camera as input
+    - Take scenario name as input (validate scenario-name).
+    - Take input from user about configuring the scenario. For ex:
+        - What time it should run (continuous, specific times of day?)
+        - What events should it export (list events --> provide filter like none, summary, recommended, all)
+        - In some scenarios - we may have to specify focus area (like exclusion zones etc.). Ask them to input via a CV2 input. Example look [here](https://www.geeksforgeeks.org/displaying-the-coordinates-of-the-points-clicked-on-the-image-using-python-opencv/)
+    - Confirm adding the scenario & then add it.
+
+- List all scenarios
+    - List all scenarios for a cameras, or across all cameras.
+
 
 ## Backend
 
@@ -83,5 +102,6 @@ implement soon. We should prompt user for username/password separately
 and store it as a encrypted secret value.
 
 
+## Scenarios schema
 
-
+Come up with a simple scenarios schema under config. This is going to be used for configuring each scenarios. Each scenario might have a different requirement - so keep that part flexible.

@@ -1,0 +1,13 @@
+FROM python:3
+
+LABEL maintainer="Harsh Murari <hmurari@visionify.ai>"
+LABEL vendor="www.visionify.ai"
+
+ADD . /app
+WORKDIR /app
+RUN pip install poetry
+RUN pip install -r requirements.txt
+RUN cat requirements.txt | xargs poetry add
+RUN poetry install
+RUN poetry build
+

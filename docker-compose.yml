@@ -1,0 +1,13 @@
+version: "3.0"
+
+services:
+  packageserver:
+    build:
+      dockerfile: Dockerfile.pkg
+      context: .
+    working_dir: /mnt
+    volumes:
+      - .:/mnt
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    command: python -m pytest

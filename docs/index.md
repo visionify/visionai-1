@@ -16,6 +16,7 @@ Install **VisionAI** application through `PyPI`. There are other options availab
 
 ```console
 $ pip install visionai
+
 ---> 100%
 
 Successfully installed visionai
@@ -138,6 +139,7 @@ $ visionai run --scenario early-smoke-and-fire-detection --camera OFFICE-01
 Starting early-smoke-and-fire-detection
 ...
 
+
 ```
 
 </div>
@@ -178,30 +180,6 @@ $ visionai pipeline --help
 │ show            Show details of a pipeline               │
 ╰──────────────────────────────────────────────────────────╯
 
-$ visionai pipeline add-scenario --help
-
- Usage: visionai pipeline add-scenario [OPTIONS]
-
- Add a scenario to a pipeline
- The order of the scenarios does not matter. All added
- scenarios are run in different threads. All scenarios are
- run after pre-processing stage is done.
- ``` Ex: visionai pipeline --name test_pipe add-scenario
- --name smoke-and-fire visionai pipeline --name test_pipe
- add-scenario --name ppe-detection visionai pipeline --name
- test_pipe run ```
- @arg pipeline - specify a named pipeline @arg scenario -
- specify name of the scenario to run
- @return None
-
-╭─ Options ────────────────────────────────────────────────╮
-│ *  --pipeline        TEXT  pipeline name [default: None] │
-│                            [required]                    │
-│ *  --scenario        TEXT  scenario to add               │
-│                            [default: None]               │
-│                            [required]                    │
-│    --help                  Show this message and exit.   │
-╰──────────────────────────────────────────────────────────╯
 
 ```
 
@@ -212,5 +190,5 @@ $ visionai pipeline add-scenario --help
 
 Congratulations! You have successfully run the first scenario. Now go through [Tutorials](tutorials/index.md) to learn about how to run multiple scnearios, how to configure each scenario for the events you need, how to set up the dependencies etc.
 
-Or you can also go through our [scenarios](scenarios/index.md) page to explore the different scenarios available and their model details. If you have a need for a scenario to be implemented, do not hesitate to submit a [request](https://github.com/visionify/visionai/issues).
+Or you can also go through our [scenarios](scenarios/index.md) page to explore the different scenarios available and their model details. If you have a need for a scenario to be implemented, do not hesitate to submit a [request](https://github.com/visionify/visionai/issues). For consulting projects and custom licenses - find the details [here](custom/index.md)
 

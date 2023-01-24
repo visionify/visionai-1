@@ -10,12 +10,11 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from visionai.auth import auth_app
-from visionai.device import device_app
-from visionai.scenario import scenario_app
-from visionai.camera import camera_app
-from visionai.web import web_app
-from visionai.pipeline import pipeline_app
+from auth import auth_app
+from device import device_app
+from cli import scenario_app, camera_app
+from web import web_app
+from pipeline import pipeline_app
 
 app = typer.Typer()
 app.add_typer(auth_app, name='auth')
