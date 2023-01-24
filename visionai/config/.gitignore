@@ -1,0 +1,2 @@
+# Don't check in the actual config to repo
+config.json

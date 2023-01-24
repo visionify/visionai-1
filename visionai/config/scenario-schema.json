@@ -1,0 +1,59 @@
+{
+    "version": "0.1",
+    "scenarios": [
+        {
+            "id": "581700a9-fb09-4f23-b8b9-abf371930e84",
+            "name": "face-blurring",
+            "category": "privacy",
+            "tags": [
+                "privacy",
+                "security"
+            ],
+            "config": {
+                "events": null
+            },
+            "model": {
+                "accuracy": 92.8,
+                "recall": 93.4,
+                "f1": 93.6,
+                "version": "1.1",
+                "uri": "https://visionify-models.azurewebsites-net/whlymAuRtzU/face-blurring.pt",
+                "dataset-size": 83829
+            }
+        },
+        {
+            "id": "581700a9-fb09-4f23-b8b9-abf371930e84",
+            "name": "ppe-detection",
+            "category": "personnel-safety",
+            "tags": [
+                "helmets",
+                "healthy",
+                "worker-safety",
+                "machinery",
+                "hard-hats"
+            ],
+            "config": {
+                "events": [
+                    {
+                        "event": "NO_HELMET",
+                        "type": "Immediate",
+                        "description": "Raised when person is detected, without helmet"
+                    },
+                    {
+                        "event": "NO_GOGGLES",
+                        "type": "Immediate",
+                        "description": "Raised when person is detected, without goggles"
+                    }
+                ]
+            },
+            "model": {
+                "accuracy": 92.8,
+                "recall": 93.4,
+                "f1": 93.6,
+                "version": "1.1",
+                "uri": "https://visionify-models.azurewebsites-net/whlymAuRtzU/face-blurring.pt",
+                "dataset-size": 83829
+            }
+        }
+    ]
+}

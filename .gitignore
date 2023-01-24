@@ -140,8 +140,6 @@ wandb/
 # All images (including any test images)
 *.jpg
 
-# Config directory
-config/
 
 # API
 __pycache__/

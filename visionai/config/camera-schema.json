@@ -1,0 +1,55 @@
+{
+    "version": "0.1",
+    "cameras": [
+        {
+            "id": "581700a9-fb09-4f23-b8b9-abf371930e84",
+            "name": "OFFICE-01",
+            "uri": "https://youtu.be/whlymAuRtzU",
+            "events": "all",
+            "preprocess": [
+                {
+                    "name": "face-blurring",
+                    "events": "all",
+                    "schedule": "all",
+                    "focus": "all"
+                }
+            ],
+            "scenarios": [
+                {
+                    "name": "ppe-detection",
+                    "events": "all",
+                    "schedule": "all",
+                    "focus": "all"
+                },
+                {
+                    "name": "smoke-and-fire-detection",
+                    "events": "all",
+                    "schedule": "all",
+                    "focus": "all"
+                }
+            ]
+        },
+        {
+            "id": "581700a9-fb09-4f23-b8b9-abf371930e84",
+            "name": "OFFICE-02",
+            "uri": "rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mp4",
+            "events": "critical",
+            "preprocess": [
+                {
+                    "name": "face-blurring",
+                    "events": "all",
+                    "schedule": "all",
+                    "focus": "all"
+                }
+            ],
+            "scenarios": [
+                {
+                    "name": "smoke-and-fire-detection",
+                    "events": "all",
+                    "schedule": "all",
+                    "focus": "all"
+                }
+            ]
+        }
+    ]
+}
