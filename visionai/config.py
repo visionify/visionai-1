@@ -9,3 +9,4 @@ if str(ROOT) not in sys.path:
 
 # Config file
 CONFIG_FILE = ROOT / 'config' / 'config.json'
+SCENARIOS_SCHEMA = ROOT / 'config' / 'scenario-schema.json'

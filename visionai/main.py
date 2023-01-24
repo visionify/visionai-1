@@ -3,8 +3,6 @@ import platform
 import sys
 from pathlib import Path
 import typer
-from rich import print
-from rich.progress import track
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # visionai/visionai directory

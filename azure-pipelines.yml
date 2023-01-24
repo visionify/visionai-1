@@ -27,7 +27,7 @@ steps:
   displayName: Install poetry
 
 - script: |
-    poetry run python -m pytest tests/
+    poetry run python -m pytest visionai/
   displayName: Test software
 
 - script: |

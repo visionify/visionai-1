@@ -5,7 +5,7 @@ import platform
 from datetime import datetime
 import coloredlogs, logging
 from typing import Optional
-from subprocess import check_output
+from subprocess import check_output, STDOUT
 from logging.handlers import RotatingFileHandler
 import inspect
 import pkg_resources as pkg
@@ -20,6 +20,13 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from util import TryExcept, emojis, WorkingDirectory
+
+def invoke_cmd(cmd):
+    try:
+        output = check_output(cmd, shell=True, stderr=STDOUT).decode()
+    except Exception as ex:
+        output = str(ex.output)
+    return output
 
 class NoColorFormatter(logging.Formatter):
     ANSI_RE = re.compile(r'\x1b\[[0-9;]*m')  # Regex for ansi strings

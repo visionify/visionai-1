@@ -127,7 +127,7 @@ def camera_remove(name: str=typer.Option('Camera name', prompt=True, confirmatio
 
 
 @camera_app.command('preview')
-def camera_install(
+def camera_preview(
     name:str = typer.Option(..., help='camera name to preview')
     ):
     '''
