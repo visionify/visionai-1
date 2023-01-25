@@ -10,11 +10,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from auth import auth_app
-from device import device_app
-from cli import scenario_app, camera_app
-from web import web_app
-from pipeline import pipeline_app
+from cli import scenario_app, camera_app, web_app, auth_app, device_app, pipeline_app
 
 app = typer.Typer()
 app.add_typer(auth_app, name='auth')

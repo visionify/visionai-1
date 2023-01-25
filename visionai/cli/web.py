@@ -4,7 +4,6 @@ from rich import print
 web_app = typer.Typer()
 
 
-
 # web app
 @web_app.command('start')
 def web_start():
