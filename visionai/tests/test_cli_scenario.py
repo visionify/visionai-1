@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
 
 from util.general import WorkingDirectory, invoke_cmd
 
-class TestInvoke(unittest.TestCase):
+class TestInvokeCliScenario(unittest.TestCase):
     @WorkingDirectory(ROOT)
     def test_invoke_scenario(self):
         output = invoke_cmd(f'python main.py scenario')
@@ -111,6 +111,19 @@ class TestInvoke(unittest.TestCase):
         assert 'tags' in output
         assert 'metrics' in output
         assert 'datasetSize' in output
+
+    @WorkingDirectory(ROOT)
+    def test_download_specific_scenario(self):
+        # download specific scenario
+        output = invoke_cmd('python main.py scenario download --scenario smoke-and-fire-detection')
+        assert 'download_models' in output
+        assert 'Model: smoke-and-fire-detection' in output
+
+    @WorkingDirectory(ROOT)
+    def test_download_all_scenarios(self):
+        # download all scenarios
+        output = invoke_cmd('python main.py scenario download')
+        assert 'Downloading scenarios : all' in output
 
 if __name__ == '__main__':
     unittest.main()

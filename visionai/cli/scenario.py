@@ -15,6 +15,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
+from util.download_models import safe_download_to_folder
 
 scenario_app = typer.Typer()
 
@@ -164,6 +165,71 @@ def scenario_remove(
     else:
         print(f'Unable to remove scenario {scenario} from {camera}')
 
+@scenario_app.command('download')
+def scenario_download(
+    scenario: str=typer.Option('all', help='scenario name')
+    ):
+    '''
+    Download models for scenarios
+
+    Download models for a given scenario, or download models for
+    all scenarios that have been configured.
+    '''
+
+    print(f'Downloading scenarios : {scenario}')
+
+    # Get list of available scenarios.
+    res = requests.get(SCENARIOS_URL)
+    all_scenarios = res.json()['scenarios']
+
+    if scenario == 'all':
+        model_names = set()
+
+        if not os.path.exists(CONFIG_FILE):
+            print('No scenarios configured. Please use visionai scenario add first')
+            return
+
+        with open(CONFIG_FILE) as f:
+            config_data = json.load(f)
+
+        for cam in config_data['cameras']:
+            for scen in cam['scenarios']:
+                model_names.add(scen['name'])
+
+            for preproc in cam['preprocess']:
+                model_names.add(preproc['name'])
+
+        if len(model_names) == 0:
+            # No models to download
+            print(f'Error: No scenarios configured. Use `visionai scenario add`')
+
+        else:
+            # Download requred models
+            for scen in all_scenarios:
+                scen_name = scen['name']
+                scen_url = scen['model_url']
+                if scen_url is None:
+                    continue
+
+                if scen_name in model_names:
+                    print(f'Model: {scen_name}: {scen_url}')
+                    safe_download_to_folder(scen_url, ROOT / 'models')
+
+    else:
+        # If a single scenario name is specified.
+        for scen in all_scenarios:
+            scen_name = scen['name']
+            scen_url = scen['model_url']
+            if scen_url is None:
+                continue
+
+            if scen_name == scenario:
+                print(f'Model: {scen_name}: {scen_url}')
+                safe_download_to_folder(scen_url, ROOT / 'models')
+                break
+
+    # Done downloading models.
+    print('Done.')
 
 @scenario_app.command('preview')
 def scenario_preview(
@@ -192,6 +258,7 @@ def callback():
     '''
 
 if __name__ == '__main__':
-    scenario_app()
+    # scenario_app()
 
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
+    scenario_download('all')

@@ -2,6 +2,16 @@
 
 ## VisionAI Changelog
 
+### **0.1.10** <small>January 25, 2023</small>
+
+- Implemented download models for scenarios
+
+### **0.1.7** <small>January 24, 2023</small>
+
+- Implemented scenarios functionality
+- Docker compose integration
+- Makefile integration
+
 ### **0.1.7** <small>January 22, 2023</small>
 
 - Implemented camera add/delete functionality

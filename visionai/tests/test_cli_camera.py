@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
 
 from util.general import WorkingDirectory, invoke_cmd
 
-class TestInvoke(unittest.TestCase):
+class TestInvokeCliCamera(unittest.TestCase):
     @WorkingDirectory(ROOT)
     def test_invoke_camera(self):
         output = invoke_cmd(f'python main.py camera')

@@ -2,3 +2,5 @@ requests
 typer[all]
 pytest
 coloredlogs
+torch
+opencv-python

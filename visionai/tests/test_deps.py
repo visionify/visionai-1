@@ -1,3 +1,4 @@
+
 import os
 import sys
 from pathlib import Path
@@ -10,18 +11,16 @@ if str(ROOT) not in sys.path:
 
 from util.general import WorkingDirectory, invoke_cmd
 
-class TestInvokeCliMain(unittest.TestCase):
+class TestDeps(unittest.TestCase):
     @WorkingDirectory(ROOT)
-    def test_invoke_main(self):
-        output = invoke_cmd(f'python main.py')
-        assert 'Error' in output
-        assert 'Missing command' in output
+    def test_import_torch(self):
+        output = invoke_cmd(f'python -c "import torch; print(torch.__version__)"')
+        assert "1.1" in output # torch 1.12 or 1.13
 
     @WorkingDirectory(ROOT)
-    def test_invoke_main_help(self):
-        output = invoke_cmd('python main.py --help')
-        assert 'VisionAI Toolkit' in output
-        assert 'docs.visionify.ai' in output
+    def test_import_cv2(self):
+        output = invoke_cmd(f'python -c "import cv2; print(cv2.__version__)"')
+        assert "4.6" in output # cv2 4.6 or above
 
 if __name__ == '__main__':
     unittest.main()
