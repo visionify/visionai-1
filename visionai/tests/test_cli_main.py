@@ -5,23 +5,38 @@ import unittest
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # visionai/visionai directory
+PKGDIR = FILE.parents[2] # visionai dir
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from util.general import WorkingDirectory, invoke_cmd
 
 class TestInvokeCliMain(unittest.TestCase):
-    @WorkingDirectory(ROOT)
+    def setUp(self):
+        # Uninstall package
+        output = invoke_cmd('pip uninstall -y visionai')
+
+    @WorkingDirectory(PKGDIR)
     def test_invoke_main(self):
-        output = invoke_cmd(f'python main.py')
+        output = invoke_cmd(f'python -m visionai')
         assert 'Error' in output
         assert 'Missing command' in output
 
-    @WorkingDirectory(ROOT)
+    @WorkingDirectory(PKGDIR)
     def test_invoke_main_help(self):
-        output = invoke_cmd('python main.py --help')
+        output = invoke_cmd('python -m visionai --help')
         assert 'VisionAI Toolkit' in output
         assert 'docs.visionify.ai' in output
+
+    @WorkingDirectory(PKGDIR)
+    def test_invoke_main_version(self):
+        output = invoke_cmd('python -m visionai --version')
+        assert 'VisionAI Toolkit Version' in output
+
+    @WorkingDirectory(PKGDIR)
+    def test_invoke_main_verbose(self):
+        output = invoke_cmd('python -m visionai --verbose')
+        assert 'Enabling verbose logging' in output
 
 if __name__ == '__main__':
     unittest.main()

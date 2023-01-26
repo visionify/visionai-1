@@ -5,6 +5,9 @@
 ### **0.1.10** <small>January 25, 2023</small>
 
 - Implemented download models for scenarios
+- Added cv2, torch, numpy dependencies for inference
+- Added support for `--version` & `--verbose` options to cli
+- CLI Test cases to use `python -m visionai` to replicate user behavior
 
 ### **0.1.7** <small>January 24, 2023</small>
 

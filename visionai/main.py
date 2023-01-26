@@ -3,9 +3,12 @@ import platform
 import sys
 from pathlib import Path
 import typer
+from typing import Optional
+import tomli
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # visionai/visionai directory
+PKGDIR = FILE.parents[1] # visionai directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
@@ -20,8 +23,30 @@ app.add_typer(camera_app, name='camera')
 app.add_typer(web_app, name='web')
 app.add_typer(pipeline_app, name='pipeline')
 
+PYPROJECT_TOML = PKGDIR / 'pyproject.toml'
+with open(PYPROJECT_TOML, 'rb') as f:
+    pkgdata = tomli.load(f)
+
+__version__ = pkgdata['tool']['poetry']['version']
+__verbose__ = False
+
+''' Enable verbose logging '''
+def verbose_callback(value: bool):
+    if value:
+        print('Enabling verbose logging')
+        __verbose__ = True
+
+''' Print version & exit '''
+def version_callback(value: bool):
+    if value:
+        print(f'VisionAI Toolkit Version: {__version__}')
+        raise typer.Exit()
+
 @app.callback()
-def app_callback():
+def app_callback(
+    verbose: Optional[bool]=typer.Option(False, '--verbose', callback=verbose_callback, is_eager=True),
+    version: Optional[bool]=typer.Option(False, '--version', callback=version_callback, is_eager=True)
+):
     '''
     VisionAI Toolkit
 
