@@ -7,7 +7,7 @@ readme = "README.md"
 license = "GPL-3.0-only"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 typer = {extras = ["all"], version = "^0.7.0"}
 requests = "^2.28.2"
 pytest = "^7.2.1"
