@@ -4,3 +4,4 @@ pytest
 coloredlogs
 torch
 opencv-python
+pyyaml
