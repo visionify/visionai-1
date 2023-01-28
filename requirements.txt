@@ -6,3 +6,4 @@ torch
 opencv-python
 pyyaml
 pandas
+seaborn
