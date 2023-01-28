@@ -13,7 +13,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from cli import scenario_app, camera_app, web_app, auth_app, device_app, pipeline_app
+from cli import scenario_app, camera_app, web_app, auth_app, device_app, pipeline_app, serve_app
 
 app = typer.Typer()
 app.add_typer(auth_app, name='auth')
@@ -22,6 +22,7 @@ app.add_typer(scenario_app, name='scenario')
 app.add_typer(camera_app, name='camera')
 app.add_typer(web_app, name='web')
 app.add_typer(pipeline_app, name='pipeline')
+app.add_typer(serve_app, name='serve')
 
 PYPROJECT_TOML = PKGDIR / 'pyproject.toml'
 with open(PYPROJECT_TOML, 'rb') as f:
