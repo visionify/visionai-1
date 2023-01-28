@@ -158,3 +158,9 @@ flask_session/
 # poetry
 poetry.lock
 dist/
+
+
+# Model files
+*.zip
+*.onnx
+*.pt

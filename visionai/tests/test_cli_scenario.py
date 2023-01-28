@@ -102,7 +102,9 @@ class TestInvokeCliScenario(unittest.TestCase):
         assert 'model_url' in output
         assert 'categories' in output
         assert 'tags' in output
-        assert 'metrics' in output
+        assert 'accuracy' in output
+        assert 'recall' in output
+        assert 'f1' in output
         assert 'datasetSize' in output
 
     @WorkingDirectory(PKGDIR)
@@ -114,7 +116,9 @@ class TestInvokeCliScenario(unittest.TestCase):
         assert 'model_url' in output
         assert 'categories' in output
         assert 'tags' in output
-        assert 'metrics' in output
+        assert 'accuracy' in output
+        assert 'recall' in output
+        assert 'f1' in output
         assert 'datasetSize' in output
 
     @WorkingDirectory(PKGDIR)

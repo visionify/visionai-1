@@ -30,6 +30,9 @@ def scenario_all():
     '''
     try:
         res = requests.get(SCENARIOS_URL)
+        # with open(SCENARIOS_SCHEMA, 'w') as f:
+        #     json.dump(res.json(), f, indent=4)
+
         scenarios = res.json()['scenarios']
     except Exception as ex:
         scenarios = str(ex)
@@ -207,7 +210,7 @@ def scenario_download(
             # Download requred models
             for scen in all_scenarios:
                 scen_name = scen['name']
-                scen_url = scen['model_url']
+                scen_url = scen['models']['latest']['model_url']
                 if scen_url is None:
                     continue
 
@@ -219,7 +222,7 @@ def scenario_download(
         # If a single scenario name is specified.
         for scen in all_scenarios:
             scen_name = scen['name']
-            scen_url = scen['model_url']
+            scen_url = scen['models']['latest']['model_url']
             if scen_url is None:
                 continue
 
@@ -261,4 +264,5 @@ if __name__ == '__main__':
     # scenario_app()
 
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
+    # scenario_add('smoke-and-fire', 'TEST-999')
     scenario_download('all')
