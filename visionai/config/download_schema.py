@@ -3,7 +3,8 @@ import requests
 import json
 from pathlib import Path
 
-CONFIGDIR = Path(__file__).parent[0]
+FILE = Path(__file__).resolve()
+CONFIGDIR = FILE.parents[0]  # config directory
 
 def main():
     SCHEMA_URL = 'https://raw.githubusercontent.com/visionify/visionai-scenarios/main/scenarios.json'
