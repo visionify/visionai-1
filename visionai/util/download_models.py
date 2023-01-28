@@ -4,6 +4,7 @@ import re
 import json
 import argparse
 from urllib.parse import urlparse
+import shutil
 
 from pathlib import Path
 FILE = Path(__file__).resolve()
@@ -12,7 +13,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))
 
-from util.general import LOGGER, print_args, check_requirements, file_md5, colorstr
+from util.general import LOGGER, print_args, check_requirements, file_md5, colorstr, invoke_cmd, WorkingDirectory
 
 def safe_download_to_file(file, url, url2=None, min_bytes=1E0, error_msg=''):
     # Attempts to download file from url or url2, checks and removes incomplete downloads < min_bytes
@@ -46,10 +47,16 @@ def safe_download_to_folder(
         return None
 
     # Find the path to save the model file.
-    file_path = Path(dirname) / os.path.basename(urlparse(url).path)
+    file_name = os.path.basename(urlparse(url).path)
+    file_path = Path(dirname) / file_name
 
     # Download the URL to path
     safe_download_to_file(file_path, url)
+
+    # If its a zip file, unzip it as well.
+    if file_path.suffix == '.zip':
+        shutil.unpack_archive(file_path, dirname) # unzip
+        os.remove(file_path)   # remove zip file
 
 def download_models(
     scenarios=[],

@@ -1,0 +1,12 @@
+head
+helmet
+gloves
+goggles
+mask
+no-suit
+no-glove
+no-goggles
+no-mask
+no-shoes
+shoes
+suit

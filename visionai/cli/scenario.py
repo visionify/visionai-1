@@ -4,7 +4,7 @@ import typer
 import time
 import json
 from uuid import uuid4
-from rich import print
+from rich import print, prompt
 from rich.progress import track
 from pathlib import Path
 import requests
@@ -13,6 +13,8 @@ FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # visionai/visionai directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
+
+MODELS_REPO = ROOT / 'models-repo'
 
 from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
 from util.download_models import safe_download_to_folder
@@ -170,10 +172,15 @@ def scenario_remove(
 
 @scenario_app.command('download')
 def scenario_download(
-    scenario: str=typer.Option('all', help='scenario name')
+    scenario: str=typer.Option('all', help='scenario name'),
+    world: bool=typer.Option(False, help='Download all public scenarios available')
     ):
     '''
     Download models for scenarios
+
+    all - all scenarios configured for cameras in this system.
+    world - all available public scenarios (this might take a lot of space.)
+    individual - specify scenario name you want to download.
 
     Download models for a given scenario, or download models for
     all scenarios that have been configured.
@@ -184,6 +191,18 @@ def scenario_download(
     # Get list of available scenarios.
     res = requests.get(SCENARIOS_URL)
     all_scenarios = res.json()['scenarios']
+
+
+    if world == True:
+        yN = prompt.Confirm.ask('Are you sure you want to download all scenarios? This may take a lot of space!')
+        if yN is True:
+            num_scenarios = len(all_scenarios)
+            for idx, scen in enumerate(all_scenarios):
+                print(f'Downloading {idx+1}/{num_scenarios}...')
+                scen_url = scen['models']['latest']['model_url']
+                safe_download_to_folder(scen_url, MODELS_REPO)
+        else:
+            raise typer.Exit()
 
     if scenario == 'all':
         model_names = set()
@@ -216,7 +235,7 @@ def scenario_download(
 
                 if scen_name in model_names:
                     print(f'Model: {scen_name}: {scen_url}')
-                    safe_download_to_folder(scen_url, ROOT / 'models')
+                    safe_download_to_folder(scen_url, MODELS_REPO)
 
     else:
         # If a single scenario name is specified.
@@ -228,7 +247,7 @@ def scenario_download(
 
             if scen_name == scenario:
                 print(f'Model: {scen_name}: {scen_url}')
-                safe_download_to_folder(scen_url, ROOT / 'models')
+                safe_download_to_folder(scen_url, MODELS_REPO)
                 break
 
     # Done downloading models.
@@ -265,4 +284,4 @@ if __name__ == '__main__':
 
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
     # scenario_add('smoke-and-fire', 'TEST-999')
-    scenario_download('all')
+    scenario_download(world=True)
