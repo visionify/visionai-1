@@ -1,4 +1,1 @@
-*.pt
-*.onnx
-*.tf
-*.engine
+runs/
