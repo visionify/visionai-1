@@ -2,6 +2,14 @@
 
 ## VisionAI Changelog
 
+### **0.1.11** <small>January 27, 2023</small>
+
+- Support for Triton models (through http/grpc)
+- Implemented yolov5 backend for triton
+- Implemented Autoshape wrapper for NMS & scaling
+- Added easy test case for reproducing.
+- Updated schema for models, fix test cases for it.
+
 ### **0.1.10** <small>January 25, 2023</small>
 
 - Implemented download models for scenarios
