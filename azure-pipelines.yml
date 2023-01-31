@@ -9,38 +9,45 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: 3.9
-  displayName: 'Use Python 3.9'
+stages:
+- stage: Build
+  displayName: Build & Test package
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: 3.9
+    displayName: 'Use Python 3.9'
 
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
 
-- script: |
-    pip install poetry
-    cat requirements.txt | xargs poetry add
-    poetry install
-  displayName: Install poetry
+  - script: |
+      pip install poetry
+      cat requirements.txt | xargs poetry add
+      poetry install
+    displayName: Install poetry
 
-- script: |
-    poetry run python -m pytest
-  displayName: Test software
+  - script: |
+      poetry run python -m pytest
+    displayName: Test software
 
-- script: |
-    poetry build
-  displayName: Building package
+  - script: |
+      poetry build
+    displayName: Building package
 
-- script: |
-    echo $(PYPI-TOKEN)
-    poetry config pypi-token.pypi $(PYPI-TOKEN)
-    poetry publish -vvv
-  displayName: Publishing to PyPI
+  - script: |
+      python -m pip install dist/*.whl
+      VISIONAI_EXEC=visionai python -m pytest
+    displayName: Test visionai executable
 
-- script: |
-    python -m pip install visionai
-    VISIONAI_EXEC=visionai python -m pytest
-  displayName: Test visionai executable
+- stage: Publish
+  displayName: Publish Package
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  steps:
+  - script: |
+      echo $(PYPI-TOKEN)
+      poetry config pypi-token.pypi $(PYPI-TOKEN)
+      poetry publish -vvv
+    displayName: Publishing to PyPI
