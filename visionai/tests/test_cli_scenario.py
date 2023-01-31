@@ -9,6 +9,7 @@ PKGDIR = FILE.parents[2] # visionai dir
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
+from config import VISIONAI_EXEC
 from util.general import WorkingDirectory, invoke_cmd
 
 class TestInvokeCliScenario(unittest.TestCase):
@@ -18,13 +19,13 @@ class TestInvokeCliScenario(unittest.TestCase):
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_scenario(self):
-        output = invoke_cmd(f'python -m visionai scenario')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario')
         assert 'Error' in output
         assert 'Missing command' in output
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_scenario_help(self):
-        output = invoke_cmd('python -m visionai scenario --help')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario --help')
         assert 'Usage' in output
         assert 'Commands' in output
         assert 'add' in output
@@ -33,7 +34,7 @@ class TestInvokeCliScenario(unittest.TestCase):
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_scenario_add_help(self):
-        output = invoke_cmd('python -m visionai scenario add --help')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario add --help')
         assert 'Usage' in output
         assert 'scenario' in output
         assert 'add' in output
@@ -43,7 +44,7 @@ class TestInvokeCliScenario(unittest.TestCase):
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_scenario_remove_help(self):
-        output = invoke_cmd('python -m visionai scenario remove --help')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario remove --help')
         assert 'Usage' in output
         assert 'scenario' in output
         assert 'remove' in output
@@ -53,7 +54,7 @@ class TestInvokeCliScenario(unittest.TestCase):
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_scenario_list_help(self):
-        output = invoke_cmd('python -m visionai scenario list --help')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario list --help')
         assert 'Usage' in output
         assert 'scenario' in output
         assert '--camera' in output
@@ -62,41 +63,41 @@ class TestInvokeCliScenario(unittest.TestCase):
     @WorkingDirectory(PKGDIR)
     def test_invoke_scenario_add_remove(self):
         # cleanup (prior test failures)
-        output = invoke_cmd('python -m visionai scenario remove --name TEST-999')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario remove --name TEST-999')
 
         # add camera
-        output = invoke_cmd('python -m visionai camera add --name TEST-999 --uri youtube.com --description "Test camera"')
+        output = invoke_cmd(f'{VISIONAI_EXEC} camera add --name TEST-999 --uri youtube.com --description "Test camera"')
         assert 'Success' in output
 
         # add scenario
-        output = invoke_cmd(f'python -m visionai scenario add --camera TEST-999 --scenario smoke-and-fire-detection')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario add --camera TEST-999 --scenario smoke-and-fire-detection')
         assert 'Scenario' in output
         assert 'smoke-and-fire-detection' in output
         assert 'added for camera' in output
 
         # list scenario
-        output = invoke_cmd('python -m visionai scenario list --camera TEST-999')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario list --camera TEST-999')
         assert "Listing configured scenarios for" in output
         assert 'TEST-999' in output
         assert "'name': 'smoke-and-fire-detection'" in output
 
         # remove scenario
-        output = invoke_cmd('python -m visionai scenario remove --camera TEST-999 --scenario smoke-and-fire-detection')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario remove --camera TEST-999 --scenario smoke-and-fire-detection')
         assert 'Success' in output
 
         # list scenario
-        output = invoke_cmd('python -m visionai scenario list  --camera TEST-999')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario list  --camera TEST-999')
         assert "Listing configured scenarios for" in output
         assert 'TEST-999' in output
         assert "'name': 'smoke-and-fire-detection'" not in output
 
         # remove camera
-        output = invoke_cmd('python -m visionai scenario remove --name TEST-999')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario remove --name TEST-999')
 
     @WorkingDirectory(PKGDIR)
     def test_list_all_scenarios(self):
         # list scenario
-        output = invoke_cmd('python -m visionai scenario list-all')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario list-all')
         assert 'Detect early signs of' in output
         assert 'ppe-detection' in output
         assert 'model_url' in output
@@ -110,7 +111,7 @@ class TestInvokeCliScenario(unittest.TestCase):
     @WorkingDirectory(PKGDIR)
     def test_list_no_camera_list_all_scenarios(self):
         # list scenario
-        output = invoke_cmd('python -m visionai scenario list')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario list')
         assert 'Detect early signs of' in output
         assert 'ppe-detection' in output
         assert 'model_url' in output
@@ -124,14 +125,14 @@ class TestInvokeCliScenario(unittest.TestCase):
     @WorkingDirectory(PKGDIR)
     def test_download_specific_scenario(self):
         # download specific scenario
-        output = invoke_cmd('python -m visionai scenario download --scenario smoke-and-fire-detection')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario download --scenario smoke-and-fire-detection')
         assert 'download_models' in output
         assert 'Model: smoke-and-fire-detection' in output
 
     @WorkingDirectory(PKGDIR)
     def test_download_all_scenarios(self):
         # download all scenarios
-        output = invoke_cmd('python -m visionai scenario download')
+        output = invoke_cmd(f'{VISIONAI_EXEC} scenario download')
         assert 'Downloading scenarios : all' in output
 
 if __name__ == '__main__':

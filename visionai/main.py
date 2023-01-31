@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 import typer
 from typing import Optional
-import tomli
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # visionai/visionai directory
@@ -13,7 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from cli import scenario_app, camera_app, web_app, auth_app, device_app, pipeline_app, serve_app
+from cli import scenario_app, camera_app, web_app, auth_app, device_app, pipeline_app, models_app
 
 app = typer.Typer()
 app.add_typer(auth_app, name='auth')
@@ -22,13 +21,15 @@ app.add_typer(scenario_app, name='scenario')
 app.add_typer(camera_app, name='camera')
 app.add_typer(web_app, name='web')
 app.add_typer(pipeline_app, name='pipeline')
-app.add_typer(serve_app, name='serve')
+app.add_typer(models_app, name='models')
 
-PYPROJECT_TOML = PKGDIR / 'pyproject.toml'
-with open(PYPROJECT_TOML, 'rb') as f:
-    pkgdata = tomli.load(f)
+import pkg_resources
 
-__version__ = pkgdata['tool']['poetry']['version']
+try:
+    __version__ = pkg_resources.get_distribution('visionai').version
+except:
+    __version__ = "0.0.0"
+
 __verbose__ = False
 
 ''' Enable verbose logging '''

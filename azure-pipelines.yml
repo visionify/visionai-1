@@ -39,3 +39,8 @@ steps:
     poetry config pypi-token.pypi $(PYPI-TOKEN)
     poetry publish -vvv
   displayName: Publishing to PyPI
+
+- script: |
+    python -m pip install visionai
+    VISIONAI_EXEC=visionai python -m pytest
+  displayName: Test visionai executable
