@@ -4,54 +4,45 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
 
-stages:
-- stage: Build
-  displayName: Build & Test package
-  jobs:
-    - job: BuildAndTest
-      steps:
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: 3.9
-        displayName: 'Use Python 3.9'
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: 3.9
+  displayName: 'Use Python 3.9'
 
-      - script: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-        displayName: 'Install dependencies'
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
 
-      - script: |
-          pip install poetry
-          cat requirements.txt | xargs poetry add
-          poetry install
-        displayName: Install poetry
+- script: |
+    pip install poetry
+    cat requirements.txt | xargs poetry add
+    poetry install
+  displayName: Install poetry
 
-      - script: |
-          poetry run python -m pytest
-        displayName: Test software
+- script: |
+    poetry run python -m pytest
+  displayName: Test software
 
-      - script: |
-          poetry build
-        displayName: Building package
+- script: |
+    poetry build
+  displayName: Build package
 
-      - script: |
-          python -m pip install dist/*.whl
-          VISIONAI_EXEC=visionai python -m pytest
-        displayName: Test visionai executable
+- script: |
+    python -m pip install dist/*.whl
+    VISIONAI_EXEC=visionai python -m pytest
+  displayName: Install & test package
 
-- stage: Publish
-  displayName: Publish Package
+- script: |
+    echo $(PYPI-TOKEN)
+    poetry config pypi-token.pypi $(PYPI-TOKEN)
+    poetry publish -vvv
+  displayName: Publishing to PyPI
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
-  jobs:
-  - job: Publish
-    steps:
-    - script: |
-        echo $(PYPI-TOKEN)
-        poetry config pypi-token.pypi $(PYPI-TOKEN)
-        poetry publish -vvv
-      displayName: Publishing to PyPI
+
