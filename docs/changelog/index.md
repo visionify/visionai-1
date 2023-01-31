@@ -2,6 +2,16 @@
 
 ## VisionAI Changelog
 
+
+### **0.1.12** <small>January 27, 2023</small>
+
+- ✨ Support for managing triton server
+- 🎨 Start/stop triton server from CLI.
+- 📝 Get/print models status coming from triton.
+- 🔥 Implemented pretty printing through rich library for models
+- 🧪 CI Tests to test both before & after package creation
+- 🐛 Fix versioning bug (that broke the previous version)
+
 ### **0.1.11** <small>January 27, 2023</small>
 
 - Support for Triton models (through http/grpc)
