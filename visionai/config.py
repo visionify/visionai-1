@@ -18,3 +18,11 @@ TRITON_SERVER_DOCKER_IMAGE = 'nvcr.io/nvidia/tritonserver:22.12-py3'
 TRITON_SERVER_EXEC = 'tritonserver'
 TRITON_SERVER_COMMAND = 'tritonserver --model-repository=/models'
 TRITON_MODELS_REPO = ROOT / 'models-repo'
+
+
+# Test stuff
+if os.environ.get('VISIONAI_EXEC') == 'visionai':
+    VISIONAI_EXEC = 'visionai'
+else:
+    VISIONAI_EXEC = 'python -m visionai'
+

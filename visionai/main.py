@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 import typer
 from typing import Optional
-import tomli
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # visionai/visionai directory
@@ -24,11 +23,13 @@ app.add_typer(web_app, name='web')
 app.add_typer(pipeline_app, name='pipeline')
 app.add_typer(models_app, name='models')
 
-PYPROJECT_TOML = PKGDIR / 'pyproject.toml'
-with open(PYPROJECT_TOML, 'rb') as f:
-    pkgdata = tomli.load(f)
+import pkg_resources
 
-__version__ = pkgdata['tool']['poetry']['version']
+try:
+    __version__ = pkg_resources.get_distribution('visionai').version
+except:
+    __version__ = "0.0.0"
+
 __verbose__ = False
 
 ''' Enable verbose logging '''

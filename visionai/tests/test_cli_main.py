@@ -10,32 +10,33 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from util.general import WorkingDirectory, invoke_cmd
+from config import VISIONAI_EXEC
 
 class TestInvokeCliMain(unittest.TestCase):
-    def setUp(self):
-        # Uninstall package
-        output = invoke_cmd('pip uninstall -y visionai')
+    # def setUp(self):
+    #     # Uninstall package
+    #     output = invoke_cmd('pip uninstall -y visionai')
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_main(self):
-        output = invoke_cmd(f'python -m visionai')
+        output = invoke_cmd(f'{VISIONAI_EXEC}')
         assert 'Error' in output
         assert 'Missing command' in output
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_main_help(self):
-        output = invoke_cmd('python -m visionai --help')
+        output = invoke_cmd(f'{VISIONAI_EXEC} --help')
         assert 'VisionAI Toolkit' in output
         assert 'docs.visionify.ai' in output
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_main_version(self):
-        output = invoke_cmd('python -m visionai --version')
+        output = invoke_cmd(f'{VISIONAI_EXEC} --version')
         assert 'VisionAI Toolkit Version' in output
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_main_verbose(self):
-        output = invoke_cmd('python -m visionai --verbose')
+        output = invoke_cmd(f'{VISIONAI_EXEC} --verbose')
         assert 'Enabling verbose logging' in output
 
 if __name__ == '__main__':
