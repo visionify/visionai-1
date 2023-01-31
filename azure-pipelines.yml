@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
 trigger:
-- main
+  - main
 
 pool:
   vmImage: ubuntu-latest
@@ -32,15 +32,17 @@ steps:
 
 - script: |
     poetry build
-  displayName: Building package
+  displayName: Build package
+
+- script: |
+    python -m pip install dist/*.whl
+    VISIONAI_EXEC=visionai python -m pytest
+  displayName: Install & test package
 
 - script: |
     echo $(PYPI-TOKEN)
     poetry config pypi-token.pypi $(PYPI-TOKEN)
     poetry publish -vvv
   displayName: Publishing to PyPI
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
 
-- script: |
-    python -m pip install visionai
-    VISIONAI_EXEC=visionai python -m pytest
-  displayName: Test visionai executable
