@@ -25,10 +25,10 @@ jobs:
       - name: Install and Build
         run: |
           pip install mkdocs-material
-          mkdocs build --clean --theme material -d ./build/
+          mkdocs build --clean -d ./build/
 
       - name: Deploy preview
         uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: ./build/
-          
+
