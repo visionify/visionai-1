@@ -39,7 +39,7 @@ def _scenario_pretty(scenario):
     try:
         version = scenario.get('version')
         overview = scenario.get('overview')[:150] + '...'
-        model = scenario.get('models')['latest']['name'] + 'v.' + scenario.get('models')['latest']['version']
+        model = scenario.get('models')['latest']['name'] + '-v.' + scenario.get('models')['latest']['version']
         accuracy = scenario.get('models')['latest']['accuracy']
         recall = scenario.get('models')['latest']['recall']
         f1 = scenario.get('models')['latest']['f1']
@@ -51,7 +51,7 @@ def _scenario_pretty(scenario):
         metrics_txt = f'[magenta]Acc {accuracy}% | Rec: {recall}% | F1: {f1}%[/magenta]\n' + \
             f'[magenta]Size: {datasetSize} images[/magenta]'
         scenario_txt = f'[blue]{model}[/blue]\n' + \
-            f'[grey7]{overview}[/grey7]\n' + \
+            f'[grey]{overview}[/grey]\n' + \
             metrics_txt + '\n' +\
             f'[grey]{docs}[/grey]\n' +\
             f'[cyan]{events}[/cyan]\n' + \
