@@ -18,7 +18,6 @@ ROOT = FILE.parents[1]  # visionai/visionai directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
-print(ROOT)
 MODELS_REPO = ROOT / 'models-repo'
 
 from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
@@ -49,7 +48,7 @@ def _scenario_pretty(scenario):
         events = '[b]Events: [/b]' + ' | '.join(scenario.get('events'))
         categories = '[b]Categories: [/b]' + ' | '.join(scenario.get('categories'))
         tags = '[b]Tags: [/b]' + ' | '.join(scenario.get('tags'))
-        metrics_txt = f'[magenta]Acc {accuracy}% | Rec: {recall}% | F1: {f1}%[/magenta]\n' + \
+        metrics_txt = f'[magenta]Acc: {accuracy}% | Rec: {recall}% | F1: {f1}%[/magenta]\n' + \
             f'[magenta]Size: {datasetSize} images[/magenta]'
         scenario_txt = f'[blue]{model}[/blue]\n' + \
             f'[grey]{overview}[/grey]\n' + \

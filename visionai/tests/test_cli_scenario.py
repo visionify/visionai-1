@@ -27,35 +27,21 @@ class TestInvokeCliScenario(unittest.TestCase):
         assert 'Commands' in output
         assert 'download' in output
         assert 'list' in output
-        assert 'preview' in output
+        assert 'test' in output
 
     @WorkingDirectory(PKGDIR)
     def test_list_all_scenarios(self):
         # list scenario
         output = invoke_cmd(f'{VISIONAI_EXEC} scenario list')
-        assert 'Detect early signs of' in output
+        assert 'smoke-and-fire-detection' in output
         assert 'ppe-detection' in output
-        assert 'model_url' in output
-        assert 'categories' in output
-        assert 'tags' in output
-        assert 'accuracy' in output
-        assert 'recall' in output
-        assert 'f1' in output
-        assert 'datasetSize' in output
-
-    @WorkingDirectory(PKGDIR)
-    def test_list_no_camera_list_all_scenarios(self):
-        # list scenario
-        output = invoke_cmd(f'{VISIONAI_EXEC} scenario list')
-        assert 'Detect early signs of' in output
-        assert 'ppe-detection' in output
-        assert 'model_url' in output
-        assert 'categories' in output
-        assert 'tags' in output
-        assert 'accuracy' in output
-        assert 'recall' in output
-        assert 'f1' in output
-        assert 'datasetSize' in output
+        assert 'https://docs.visionify.ai' in output
+        assert 'Categories' in output
+        assert 'Tags' in output
+        assert 'Acc:' in output
+        assert 'Rec:' in output
+        assert 'F1:' in output
+        assert 'Size:' in output
 
     @WorkingDirectory(PKGDIR)
     def test_download_specific_scenario(self):
