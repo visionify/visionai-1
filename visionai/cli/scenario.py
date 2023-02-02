@@ -8,6 +8,10 @@ from rich import print, prompt
 from rich.progress import track
 from pathlib import Path
 import requests
+from rich.console import Console
+from rich.columns import Columns
+from rich.panel import Panel
+
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[1]  # visionai/visionai directory
@@ -18,12 +22,54 @@ MODELS_REPO = ROOT / 'models-repo'
 
 from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
 from util.download_models import safe_download_to_folder
-
-scenario_app = typer.Typer()
+from models.triton_client import TritonClient
+from scenarios import load_scenario
 
 # scenario app
+scenario_app = typer.Typer()
+
+# print primitives
+def _scenario_pretty(scenario):
+    if scenario is None:
+        return Panel('[red]NONE[/red]')
+
+    id = scenario.get('id')
+    name = scenario.get('name')
+
+    try:
+        version = scenario.get('version')
+        overview = scenario.get('overview')[:150] + '...'
+        model = scenario.get('models')['latest']['name'] + 'v.' + scenario.get('models')['latest']['version']
+        accuracy = scenario.get('models')['latest']['accuracy']
+        recall = scenario.get('models')['latest']['recall']
+        f1 = scenario.get('models')['latest']['f1']
+        datasetSize = scenario.get('models')['latest']['datasetSize']
+        docs = scenario.get('docs')
+        events = '[b]Events: [/b]' + ' | '.join(scenario.get('events'))
+        categories = '[b]Categories: [/b]' + ' | '.join(scenario.get('categories'))
+        tags = '[b]Tags: [/b]' + ' | '.join(scenario.get('tags'))
+        metrics_txt = f'[magenta]Acc {accuracy}% | Rec: {recall}% | F1: {f1}%[/magenta]\n' + \
+            f'[magenta]Size: {datasetSize} images[/magenta]'
+        scenario_txt = f'[blue]{model}[/blue]\n' + \
+            f'[grey7]{overview}[/grey7]\n' + \
+            metrics_txt + '\n' +\
+            f'[grey]{docs}[/grey]\n' +\
+            f'[cyan]{events}[/cyan]\n' + \
+            f'[cyan]{categories}[/cyan]\n' +\
+            f'[cyan]{tags}[/cyan]'
+
+        return Panel(scenario_txt, title=f'[yellow]{name}[/yellow]', width=60, expand=False)
+    except Exception as ex:
+        return Panel(f'[red]ERR {name}[/red]')
+
+def print_scenarios(scenarios):
+    console = Console()
+    scen_pretty = [_scenario_pretty(scen) for scen in scenarios]
+    console.print(Panel(Columns(scen_pretty), title='Scenarios'))
+
+
 @scenario_app.command('list')
-def scenario_all():
+def scenario_list():
     '''
     List all scenarios available
 
@@ -39,7 +85,7 @@ def scenario_all():
     except Exception as ex:
         scenarios = str(ex)
 
-    print(scenarios)
+    print_scenarios(scenarios)
 
 @scenario_app.command('download')
 def scenario_download(
@@ -49,9 +95,9 @@ def scenario_download(
     '''
     Download models for scenarios
 
-    all - all scenarios configured for cameras in this system.
-    world - all available public scenarios (this might take a lot of space.)
-    individual - specify scenario name you want to download.
+    --scenario [NAME] : specify scenario to download.
+    --scenario [all]  : download all scenarios configured for the system.
+    --scenarios[world]: download all available scenarios.
 
     Download models for a given scenario, or download models for
     all scenarios that have been configured.
@@ -124,16 +170,53 @@ def scenario_download(
     # Done downloading models.
     print('Done.')
 
-@scenario_app.command('preview')
-def scenario_preview(
-    name:str = typer.Option(..., help='scenario name to preview')
+
+@scenario_app.command('test')
+def scenario_test(
+    name:str = typer.Option(..., help='scenario name to test'),
+    camera: str = typer.Option('0', help='Camera name (default is webcam)')
     ):
     '''
-    Preview the scenario feed
+    Run the scenario locally to test it out.
 
-    View the scenario feed, review FPS etc available for scenario.
+    - Download the model if not available.
+    - Start the model server with only this model.
+    -
     '''
-    print(f"TODO: Implement scenario preview functionality.")
+
+    res = requests.get(SCENARIOS_URL)
+    all_scenarios = res.json()['scenarios']
+    scenario_to_test = None
+    for scen in all_scenarios:
+        if scen['name'] == name:
+            scenario_to_test = scen
+            break
+
+    if scenario_to_test is None:
+        print(f'ERROR: Scenario {name} not found.')
+        raise typer.Abort()
+
+    print(f'Downloading models for {name}')
+    scenario_download(scenario=name)
+
+    print(f'Starting model server..')
+    tc = TritonClient()
+    tc.start_model_server()
+    tc.print_models_served()
+
+    print(f'Loading inference engine for {name}')
+    inference_engine = load_scenario(scenario_name=name, camera_name=camera)
+
+    # for test command - block the main thread.
+    print(f'Running on default web-cam')
+    inference_engine.start()
+
+
+
+    #TODO: Provide support for running on any camera
+
+
+
 
 @scenario_app.callback()
 def callback():
@@ -151,8 +234,9 @@ def callback():
     '''
 
 if __name__ == '__main__':
-    # scenario_app()
+    scenario_app()
+    # scenario_list()
 
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
     # scenario_add('smoke-and-fire', 'TEST-999')
-    scenario_download(world=True)
+    # scenario_download(world=True)

@@ -164,3 +164,7 @@ dist/
 *.zip
 *.onnx
 *.pt
+
+
+# models-repo directory
+visionai/models-repo/*
