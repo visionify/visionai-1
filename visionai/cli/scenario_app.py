@@ -18,6 +18,7 @@ ROOT = FILE.parents[1]  # visionai/visionai directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
+print(ROOT)
 MODELS_REPO = ROOT / 'models-repo'
 
 from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
