@@ -262,6 +262,9 @@ class TritonClient():
             return
 
         try:
+            print('Pulling docker image (this may take a while)')
+            self.docker_client.images.pull(TRITON_SERVER_DOCKER_IMAGE)
+
             print('Starting model server')
             self.docker_client.containers.run(
                 image=TRITON_SERVER_DOCKER_IMAGE,   # image name
