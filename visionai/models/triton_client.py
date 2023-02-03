@@ -14,6 +14,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from config import TRITON_HTTP_URL, TRITON_SERVER_DOCKER_IMAGE, TRITON_SERVER_EXEC, TRITON_SERVER_COMMAND, TRITON_MODELS_REPO
+from util.docker_utils import docker_container_run
 
 class TritonClient():
 
@@ -269,8 +270,11 @@ class TritonClient():
             # Stream progress message while pulling the docker image.
             docker_image_pull_with_progress(self.docker_client, image_name=TRITON_SERVER_DOCKER_IMAGE)
 
+            # Try starting docker container with NVIDIA runtime,
+            # If that is not available - then start the container with regular runtime
             print('Starting model server')
-            self.docker_client.containers.run(
+            docker_container_run(
+                client=self.docker_client,
                 image=TRITON_SERVER_DOCKER_IMAGE,   # image name
                 command=TRITON_SERVER_COMMAND,      # command to run in container
                 stdout=False,                       # disable logs
@@ -278,7 +282,6 @@ class TritonClient():
                 detach=True,                        # detached mode - daemon
                 remove=True,                        # remove fs after exit
                 auto_remove=True,                   # remove fs if container fails
-                runtime='nvidia',                   # Use nvidia-container-runtime
                 device_requests=[                   # similar to --gpus=all ??
                     docker.types.DeviceRequest(capabilities=[['gpu']])
                     ],

@@ -27,6 +27,58 @@ def docker_image_pull_with_progress(client, image_name):
         for line in resp:
             show_progress(line, progress)
 
+def docker_container_run(
+    client,                 # docker.from_env()
+    image,                  # image name
+    command,                # command to run in container
+    stdout=False,           # disable logs
+    stderr=False,           # disable stderr logs
+    detach=True,            # detached mode - daemon
+    remove=True,            # remove fs after exit
+    auto_remove=True,       # remove fs if container fails
+    device_requests=None,   # pass GPU
+    network_mode='host',    # --net=host
+    volumes=[]              # -v
+):
+    ctainer = None
+    try:
+        ctainer = client.containers.run(
+            image=image,
+            command=command,
+            stdout=stdout,
+            stderr=stderr,
+            detach=detach,
+            remove=remove,
+            auto_remove=auto_remove,
+            runtime='nvidia',   # Use nvidia-container-runtime
+            device_requests=device_requests,
+            network_mode=network_mode,
+            volumes=volumes
+        )
+    except Exception as ex:
+        print('Start model-server with NVIDIA runtime failed.')
+        print('Trying without NVIDIA runtime')
+
+        try:
+            ctainer = client.containers.run(
+                image=image,
+                command=command,
+                stdout=stdout,
+                stderr=stderr,
+                detach=detach,
+                remove=remove,
+                auto_remove=auto_remove,
+                device_requests=device_requests,
+                network_mode=network_mode,
+                volumes=volumes
+            )
+        except Exception as ex:
+            print('ERROR: Unable to start model server:')
+            print(f'ERROR: {ex}')
+
+    print('Started model server successfully')
+    return ctainer
+
 if __name__ == '__main__':
     # Pull a large image
     client = docker.from_env()
