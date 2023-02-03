@@ -4,6 +4,7 @@ from rich.console import Console
 from rich.columns import Columns
 from rich.panel import Panel
 import time
+import json
 
 import sys
 from pathlib import Path
@@ -263,7 +264,10 @@ class TritonClient():
 
         try:
             print('Pulling docker image (this may take a while)')
-            self.docker_client.images.pull(TRITON_SERVER_DOCKER_IMAGE)
+            from util.docker_utils import docker_image_pull_with_progress
+
+            # Stream progress message while pulling the docker image.
+            docker_image_pull_with_progress(self.docker_client, image_name=TRITON_SERVER_DOCKER_IMAGE)
 
             print('Starting model server')
             self.docker_client.containers.run(

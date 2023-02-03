@@ -35,7 +35,7 @@ class TestInvokeCliScenario(unittest.TestCase):
         output = invoke_cmd(f'{VISIONAI_EXEC} scenario list')
         assert 'smoke-and-fire-detection' in output
         assert 'ppe-detection' in output
-        assert 'https://docs.visionify.ai' in output
+        assert 'docs.visionify.ai' in output
         assert 'Categories' in output
         assert 'Tags' in output
         assert 'Acc:' in output

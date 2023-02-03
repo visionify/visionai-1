@@ -117,7 +117,7 @@ def scenario_download(
             for idx, scen in enumerate(all_scenarios):
                 print(f'Downloading {idx+1}/{num_scenarios}...')
                 scen_url = scen['models']['latest']['model_url']
-                safe_download_to_folder(scen_url, MODELS_REPO)
+                safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
         else:
             raise typer.Exit()
 
@@ -152,7 +152,7 @@ def scenario_download(
 
                 if scen_name in model_names:
                     print(f'Model: {scen_name}: {scen_url}')
-                    safe_download_to_folder(scen_url, MODELS_REPO)
+                    safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
 
     else:
         # If a single scenario name is specified.
@@ -164,7 +164,7 @@ def scenario_download(
 
             if scen_name == scenario:
                 print(f'Model: {scen_name}: {scen_url}')
-                safe_download_to_folder(scen_url, MODELS_REPO)
+                safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
                 break
 
     # Done downloading models.
@@ -180,8 +180,9 @@ def scenario_test(
     Run the scenario locally to test it out.
 
     - Download the model if not available.
-    - Start the model server with only this model.
-    -
+    - Pull the model server container image.
+    - Start the model server container with this model.
+    - Run inference with this model
     '''
 
     res = requests.get(SCENARIOS_URL)
