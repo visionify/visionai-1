@@ -29,9 +29,9 @@ def yolov5_triton(url, model_name):
 if __name__ == '__main__':
 
     # Model
-    model_smoke = yolov5_triton(url='http://0.0.0.0:8000', model_name='smoke-and-fire-detection')
-    model_ppe = yolov5_triton(url='http://0.0.0.0:8000', model_name='ppe-detection')
-    model_yolov5s = yolov5_triton(url='http://0.0.0.0:8000', model_name='yolov5s')
+    model_smoke = yolov5_triton(url='http://localhost:8000', model_name='smoke-and-fire-detection')
+    model_ppe = yolov5_triton(url='http://localhost:8000', model_name='ppe-detection')
+    model_yolov5s = yolov5_triton(url='http://localhost:8000', model_name='yolov5s')
 
     # or use grpc
     # model = yolov5_triton(url='grpc://0.0.0.0:8001', model='ppe-detection')

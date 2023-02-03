@@ -269,6 +269,7 @@ class TritonClient():
 
             # Stream progress message while pulling the docker image.
             docker_image_pull_with_progress(self.docker_client, image_name=TRITON_SERVER_DOCKER_IMAGE)
+            print('Done.')
 
             # Try starting docker container with NVIDIA runtime,
             # If that is not available - then start the container with regular runtime

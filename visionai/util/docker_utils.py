@@ -41,7 +41,9 @@ def docker_container_run(
     volumes=[]              # -v
 ):
     ctainer = None
+    container_type = 'MODEL_SERVER'
     try:
+        print('Try model-server with NVIDIA runtime & GPUs.')
         ctainer = client.containers.run(
             image=image,
             command=command,
@@ -55,12 +57,13 @@ def docker_container_run(
             network_mode=network_mode,
             volumes=volumes
         )
+        container_type = 'NVIDIA Runtime + GPU'
     except Exception as ex:
         ctainer = None
-        print('Start model-server with NVIDIA runtime failed.')
+        print('Model-server with NVIDIA runtime & GPUs failed')
 
     if ctainer is None:
-        print('Trying model-server without NVIDIA runtime')
+        print('Try model-server without NVIDIA runtime + CPUs')
 
         try:
             ctainer = client.containers.run(
@@ -75,12 +78,13 @@ def docker_container_run(
                 network_mode=network_mode,
                 volumes=volumes
             )
+            container_type = 'NVIDIA Runtime + CPU'
         except Exception as ex:
             ctainer = None
-            print('ERROR: Unable to start model server with default run-time.')
+            print('Model-server with NVIDIA runtime + CPU failed')
 
     if ctainer is None:
-        print('Trying model server without NVIDIA runtime & CPU only')
+        print('Try model-server with default runtime + CPU')
 
         try:
             ctainer = client.containers.run(
@@ -94,15 +98,16 @@ def docker_container_run(
                 network_mode=network_mode,
                 volumes=volumes
             )
+            container_type = 'Default Runtime + CPU'
         except Exception as ex:
             ctainer = None
-            print('ERROR: Unable to start model server with default runtime & CPU-only.')
+            print('Model-server with default runtime + CPU failed.')
 
     if ctainer is None:
         print('ERROR: Giving up.')
         return None
     else:
-        print('Started model server successfully')
+        print(f'Started model server successfully: {container_type}')
         return ctainer
 
 if __name__ == '__main__':
