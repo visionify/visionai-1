@@ -20,6 +20,7 @@ from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL, TRITON_SERVER_D
 from util.general import invoke_cmd
 from util.download_models import safe_download_to_folder
 from models.triton_client import TritonClient
+from util.docker_utils import docker_container_run, docker_image_pull_with_progress
 
 # Model serve app
 models_app = typer.Typer()

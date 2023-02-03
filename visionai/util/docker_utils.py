@@ -56,8 +56,11 @@ def docker_container_run(
             volumes=volumes
         )
     except Exception as ex:
+        ctainer = None
         print('Start model-server with NVIDIA runtime failed.')
-        print('Trying without NVIDIA runtime')
+
+    if ctainer is None:
+        print('Trying model-server without NVIDIA runtime')
 
         try:
             ctainer = client.containers.run(
@@ -73,11 +76,34 @@ def docker_container_run(
                 volumes=volumes
             )
         except Exception as ex:
-            print('ERROR: Unable to start model server:')
-            print(f'ERROR: {ex}')
+            ctainer = None
+            print('ERROR: Unable to start model server with default run-time.')
 
-    print('Started model server successfully')
-    return ctainer
+    if ctainer is None:
+        print('Trying model server without NVIDIA runtime & CPU only')
+
+        try:
+            ctainer = client.containers.run(
+                image=image,
+                command=command,
+                stdout=stdout,
+                stderr=stderr,
+                detach=detach,
+                remove=remove,
+                auto_remove=auto_remove,
+                network_mode=network_mode,
+                volumes=volumes
+            )
+        except Exception as ex:
+            ctainer = None
+            print('ERROR: Unable to start model server with default runtime & CPU-only.')
+
+    if ctainer is None:
+        print('ERROR: Giving up.')
+        return None
+    else:
+        print('Started model server successfully')
+        return ctainer
 
 if __name__ == '__main__':
     # Pull a large image
