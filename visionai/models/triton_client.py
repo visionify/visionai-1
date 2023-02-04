@@ -1,5 +1,4 @@
 import docker
-import tritonclient.http
 from rich.console import Console
 from rich.columns import Columns
 from rich.panel import Panel
@@ -14,7 +13,6 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from config import TRITON_HTTP_URL, TRITON_SERVER_DOCKER_IMAGE, TRITON_SERVER_EXEC, TRITON_SERVER_COMMAND, TRITON_MODELS_REPO
-from util.docker_utils import docker_container_run
 
 class TritonClient():
 
@@ -42,6 +40,7 @@ class TritonClient():
     def init_triton_client(self):
         # Triton client
         try:
+            import tritonclient.http
             self.triton_client = tritonclient.http.InferenceServerClient(url=TRITON_HTTP_URL)
             self.triton_client.get_server_metadata()
         except Exception as ex:
@@ -235,7 +234,6 @@ class TritonClient():
         else:
             return self.triton_client.get_model_repository_index()
 
-
     def print_models_served(self):
         '''
         Print models being served by triton server
@@ -265,7 +263,7 @@ class TritonClient():
 
         try:
             print('Pulling docker image (this may take a while)')
-            from util.docker_utils import docker_image_pull_with_progress
+            from util.docker_utils import docker_image_pull_with_progress, docker_container_run
 
             # Stream progress message while pulling the docker image.
             docker_image_pull_with_progress(self.docker_client, image_name=TRITON_SERVER_DOCKER_IMAGE)
@@ -286,23 +284,41 @@ class TritonClient():
                 device_requests=[                   # similar to --gpus=all ??
                     docker.types.DeviceRequest(capabilities=[['gpu']])
                     ],
-                network_mode='host',                # --net=host
+                # network_mode='host',                # --net=host
                 volumes=                            # -v
-                    [f'{TRITON_MODELS_REPO}:/models']
+                    [f'{TRITON_MODELS_REPO}:/models'],
+                ports={
+                    '8000': 8000,
+                    '8001': 8001,
+                    '8002': 8002
+                }
             )
 
-            # sleep a bit
-            time.sleep(3)
+            init_complete = False
+            init_idx = 0
+            for init_idx in range(1,11):
+                # sleep a bit
+                time.sleep(1)
 
-            # Attach triton_client
-            self.init_triton_client()
-            if self.triton_client is None:
-                print('ERROR: Unable to connect to triton client')
+                # Attach triton_client
+                self.init_triton_client()
+                if self.triton_client is None:
+                    print(f'[{init_idx}/{10}] Triton client init.')
+                    init_complete = False
+                    continue
+
+                else:
+                    init_complete = True
+                    break
+
+            if init_complete is True:
+                # Everything looks good
+                print('Triton client initialized.')
+                return True
+            else:
+                print('Error with triton client initialization. Giving up after 10 retries')
                 return False
 
-            # Everything looks good
-            print('Done.')
-            return True
         except Exception as ex:
             print('ERROR: Trying to start model server.')
             print(f'Exception: {ex}')

@@ -28,17 +28,18 @@ def docker_image_pull_with_progress(client, image_name):
             show_progress(line, progress)
 
 def docker_container_run(
-    client,                 # docker.from_env()
-    image,                  # image name
-    command,                # command to run in container
-    stdout=False,           # disable logs
-    stderr=False,           # disable stderr logs
-    detach=True,            # detached mode - daemon
-    remove=True,            # remove fs after exit
-    auto_remove=True,       # remove fs if container fails
-    device_requests=None,   # pass GPU
-    network_mode='host',    # --net=host
-    volumes=[]              # -v
+    client:docker.DockerClient,     # docker.from_env()
+    image,                          # image name
+    command,                        # command to run in container
+    stdout=False,                   # disable logs
+    stderr=False,                   # disable stderr logs
+    detach=True,                    # detached mode - daemon
+    remove=True,                    # remove fs after exit
+    auto_remove=True,               # remove fs if container fails
+    device_requests=None,           # pass GPU
+    network_mode='host',            # --net=host
+    volumes=[],                     # -v ./models-repo:/models
+    ports={}                        # -p 8000:8000 etc (needed for mac)
 ):
     ctainer = None
     container_type = 'MODEL_SERVER'
@@ -54,8 +55,9 @@ def docker_container_run(
             auto_remove=auto_remove,
             runtime='nvidia',   # Use nvidia-container-runtime
             device_requests=device_requests,
-            network_mode=network_mode,
-            volumes=volumes
+            # network_mode=network_mode,
+            volumes=volumes,
+            ports=ports
         )
         container_type = 'NVIDIA Runtime + GPU'
     except Exception as ex:
@@ -75,8 +77,9 @@ def docker_container_run(
                 remove=remove,
                 auto_remove=auto_remove,
                 device_requests=device_requests,
-                network_mode=network_mode,
-                volumes=volumes
+                # network_mode=network_mode,
+                volumes=volumes,
+                ports=ports
             )
             container_type = 'NVIDIA Runtime + CPU'
         except Exception as ex:
@@ -95,8 +98,9 @@ def docker_container_run(
                 detach=detach,
                 remove=remove,
                 auto_remove=auto_remove,
-                network_mode=network_mode,
-                volumes=volumes
+                # network_mode=network_mode,
+                volumes=volumes,
+                ports=ports
             )
             container_type = 'Default Runtime + CPU'
         except Exception as ex:

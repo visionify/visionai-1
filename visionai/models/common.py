@@ -1,17 +1,5 @@
-# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
-"""
-Common modules
-"""
-
-import ast
-import contextlib
-import json
-import math
+import os
 import platform
-import warnings
-import zipfile
-from collections import OrderedDict, namedtuple
-from copy import copy
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -26,10 +14,12 @@ from torch.cuda import amp
 import typing
 
 from util import TryExcept
-from util.general import (LOGGER, ROOT, Profile, check_requirements, colorstr, non_max_suppression, letterbox,
-                            yaml_load, xywh2xyxy, xyxy2xywh, check_version, exif_transpose, scale_boxes,
-                            smart_inference_mode, copy_attr, increment_path, select_device)
+from util.general import (LOGGER, ROOT, Profile, check_requirements, colorstr, git_describe, file_date,
+                            yaml_load, check_version, copy_attr, increment_path, smart_inference_mode)
+
+from util.image_utils import xyxy2xywh, exif_transpose, scale_boxes, letterbox, select_device
 from models.plots import Annotator, colors, save_one_box
+
 
 class TritonRemoteModel:
     """ A wrapper over a model served by the Triton Inference Server. It can

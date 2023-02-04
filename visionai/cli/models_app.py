@@ -20,10 +20,35 @@ from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL, TRITON_SERVER_D
 from util.general import invoke_cmd
 from util.download_models import safe_download_to_folder
 from models.triton_client import TritonClient
-from util.docker_utils import docker_container_run, docker_image_pull_with_progress
 
 # Model serve app
 models_app = typer.Typer()
+
+@models_app.command('check')
+def models_check():
+    '''
+    Check model-server status & print helpful debug info.
+
+    TODO:
+    Goal of the check command is to identify any configuration/dependency
+    issues that we can inform to user that he can fix on his end. This could
+    be like missing dependency, missing software package, missing driver details
+    etc.
+
+    - Check if model-server is running or not.
+    - Check if triton-client can access model-server
+    - Check what are the models served
+    - Print all of this in a pretty manner [checkbox based]
+    - Check container logs & show them here.
+    - grep container logs for common errors & highlight that in output
+    '''
+    print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
+    print('Checking model server...')
+
+    # TODO: may need other information for debug
+    #
+    tc = TritonClient()
+    tc.print_models_served()
 
 @models_app.command('start')
 @models_app.command('serve')
@@ -82,5 +107,7 @@ def callback():
     '''
 
 if __name__ == '__main__':
-    models_app()
+    # models_app()
+
+    models_status()
 
