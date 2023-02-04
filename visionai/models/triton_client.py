@@ -3,7 +3,7 @@ from rich.console import Console
 from rich.columns import Columns
 from rich.panel import Panel
 import time
-import json
+from urllib.parse import urlparse
 
 import sys
 from pathlib import Path
@@ -41,7 +41,8 @@ class TritonClient():
         # Triton client
         try:
             import tritonclient.http
-            self.triton_client = tritonclient.http.InferenceServerClient(url=TRITON_HTTP_URL)
+            parsed_url = urlparse(TRITON_HTTP_URL)
+            self.triton_client = tritonclient.http.InferenceServerClient(url=parsed_url.netloc)
             self.triton_client.get_server_metadata()
         except Exception as ex:
             self.triton_client = None

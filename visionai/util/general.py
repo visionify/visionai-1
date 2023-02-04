@@ -266,31 +266,55 @@ def check_git_info(path=ROOT):
         return {'remote': None, 'branch': None, 'commit': None}
 
 def gpu_mem_stats():
-    import nvidia_smi
+    if platform.system() == 'Darwin':
 
-    def sizeof_fmt(num, suffix="B"):
-        for unit in ["", "K", "M", "G", "T"]:
-            if abs(num) < 1024.0:
-                return f"{num:3.1f}{unit}{suffix}"
-            num /= 1024.0
-        return f"{num:.1f}Yi{suffix}"
+        # Mac OS - nvidia-smi is not supported.
+        check_requirements('psutil', install=True)
+        import psutil
+        mem = psutil.virtual_memory()
 
-    nvidia_smi.nvmlInit()
-    deviceCount = nvidia_smi.nvmlDeviceGetCount()
-    for i in range(deviceCount):
-        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
-        info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
-        dev = nvidia_smi.nvmlDeviceGetName(handle).decode('utf-8')
-        mem_free_pct = 100*info.free/info.total
+        used_pct_s = f'{mem.used/mem.total * 100:.1f}'
+        used_gb_s = f'{mem.used/1024/1024/1024:.0f}'
+        total_gb_s = f'{mem.total/1024/1024/1024:.0f}'
+
+        mem_free_pct = mem.available/mem.total * 100
+        free_pct_s = f'{mem_free_pct:.1f}'
+        free_gb_s = f'{mem.available/1024/1024/1024:.0f}'
+
         color = 'cyan' if mem_free_pct > 30 else 'red'
         check = '✅' if mem_free_pct > 30 else '❌'
-        mem_free_pct_s = f'{mem_free_pct:.2f}% free'
-        mem_total_s = f'{sizeof_fmt(info.total)}'
-        mem_used_s = f'{sizeof_fmt(info.used)}'
-        LOGGER.info(colorstr(color, f'{check} GPU {i} [{dev}]: {mem_free_pct_s} [{mem_used_s}/{mem_total_s}]'))
 
-    nvidia_smi.nvmlShutdown()
-    return mem_free_pct
+        LOGGER.info(colorstr(color, f'{check} CPU memory [USED]: {used_pct_s}% [{used_gb_s}GB/{total_gb_s}GB]'))
+        LOGGER.info(colorstr(color, f'{check} CPU memory [FREE]: {free_pct_s}% [{free_gb_s}GB/{total_gb_s}GB]'))
+        return mem_free_pct
+
+    else:
+        check_requirements('nvidia_smi', install=True)
+        import nvidia_smi
+
+        def sizeof_fmt(num, suffix="B"):
+            for unit in ["", "K", "M", "G", "T"]:
+                if abs(num) < 1024.0:
+                    return f"{num:3.1f}{unit}{suffix}"
+                num /= 1024.0
+            return f"{num:.1f}Yi{suffix}"
+
+        nvidia_smi.nvmlInit()
+        deviceCount = nvidia_smi.nvmlDeviceGetCount()
+        for i in range(deviceCount):
+            handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
+            info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
+            dev = nvidia_smi.nvmlDeviceGetName(handle).decode('utf-8')
+            mem_free_pct = 100*info.free/info.total
+            color = 'cyan' if mem_free_pct > 30 else 'red'
+            check = '✅' if mem_free_pct > 30 else '❌'
+            mem_free_pct_s = f'{mem_free_pct:.2f}% free'
+            mem_total_s = f'{sizeof_fmt(info.total)}'
+            mem_used_s = f'{sizeof_fmt(info.used)}'
+            LOGGER.info(colorstr(color, f'{check} GPU {i} [{dev}]: {mem_free_pct_s} [{mem_used_s}/{mem_total_s}]'))
+
+        nvidia_smi.nvmlShutdown()
+        return mem_free_pct
 
 
 class Profile(contextlib.ContextDecorator):

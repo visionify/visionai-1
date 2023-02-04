@@ -16,7 +16,7 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 
 from util import TryExcept, emojis, WorkingDirectory
-from util.general import git_describe, file_date, LOGGER
+from util.general import git_describe, file_date, LOGGER, check_version
 from util.metrics import box_iou
 
 

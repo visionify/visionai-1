@@ -20,7 +20,7 @@ if str(ROOT) not in sys.path:
 
 MODELS_REPO = ROOT / 'models-repo'
 
-from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL
+from config import CONFIG_FILE, SCENARIOS_SCHEMA, SCENARIOS_URL, TRITON_HTTP_URL
 from util.download_models import safe_download_to_folder
 from models.triton_client import TritonClient
 from scenarios import load_scenario
@@ -185,6 +185,10 @@ def scenario_test(
     - Run inference with this model
     '''
 
+    # import TritonClient module
+    from models.triton_client import TritonClient
+
+    # Get the latest scenarios file
     res = requests.get(SCENARIOS_URL)
     all_scenarios = res.json()['scenarios']
     scenario_to_test = None
@@ -195,15 +199,39 @@ def scenario_test(
 
     if scenario_to_test is None:
         print(f'ERROR: Scenario {name} not found.')
-        raise typer.Abort()
+        raise typer.Exit()
 
-    print(f'Downloading models for {name}')
-    scenario_download(scenario=name)
-
-    print(f'Starting model server..')
+    # Check if model server is running
     tc = TritonClient()
-    tc.start_model_server()
+    if not tc.is_triton_running():
+        print(f'ERROR: Model server is not running. Start with')
+        print('[magenta] visionai models serve [/magenta]')
+        raise typer.Exit()
+    else:
+        print('Model-server running.')
+
+
+    # Check if the specified scenario model is running.
+    model_to_test_available = False
+    model_list = tc.get_models()
+    for model_item in model_list:
+        if model_item['name'] == name:
+            model_to_test_available = True
+            break
+
+    # Print models being run
     tc.print_models_served()
+
+    if not model_to_test_available:
+        print(f'ERROR: Model {name} is not being served by the model-server.')
+        print(f'Download models and restart model-server')
+        print(f'[magenta]visionai models stop[/magenta]')
+        print(f'[magenta]visionai scenario download {name}[/magenta]')
+        print(f'[magenta]visionai models start[/magenta]')
+        print(f'[magenta]visionai scenario test {name} [/magenta]')
+        raise typer.Exit()
+    else:
+        print(f'Model {name} is being served.')
 
     print(f'Loading inference engine for {name}')
     inference_engine = load_scenario(scenario_name=name, camera_name=camera)
@@ -212,11 +240,7 @@ def scenario_test(
     print(f'Running on default web-cam')
     inference_engine.start()
 
-
-
     #TODO: Provide support for running on any camera
-
-
 
 
 @scenario_app.callback()
@@ -235,9 +259,11 @@ def callback():
     '''
 
 if __name__ == '__main__':
-    scenario_app()
+    # scenario_app()
     # scenario_list()
 
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
     # scenario_add('smoke-and-fire', 'TEST-999')
     # scenario_download(world=True)
+
+    scenario_test(name='smoke-and-fire-detection', camera=0)

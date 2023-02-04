@@ -1,4 +1,3 @@
-import cv2
 from rich import print
 import time
 
@@ -11,18 +10,27 @@ if str(ROOT) not in sys.path:
 
 from util.general import LOGGER
 from scenarios import Scenario
-from models.triton_client_yolov5 import yolov5_triton
+from config import TRITON_HTTP_URL
 
 class SmokeAndFireDetection(Scenario):
-    def __init__(self, scenario_name, camera=None, events=None, triton_url='localhost:8000'):
+    def __init__(self, scenario_name, camera_name=0, events=None, triton_url=TRITON_HTTP_URL):
+
+        from models.triton_client_yolov5 import yolov5_triton
         self.model = yolov5_triton(triton_url, scenario_name)
-        super().__init__(scenario_name, camera, events, triton_url)
+
+        super().__init__(scenario_name, camera_name, events, triton_url)
 
 
-    def start(self, stream=None):
+    def start(self, camera_name=0):
         '''
         Stream processing
+
+        When running a scenario - the caller can specify any specific camera.
         '''
+
+        import cv2
+        stream = camera_name
+
         print(f'Opening capture for {stream}')
         video = cv2.VideoCapture(stream)
 
@@ -37,7 +45,8 @@ class SmokeAndFireDetection(Scenario):
             # Detect smoke & fire
             results = self.model(frame, size=640)  # batched inference
             results.print()
-            results.save()
+            results.show()
+            # results.save()
 
             # if stop_evt is set, then break
             if self.stop_evt.is_set():

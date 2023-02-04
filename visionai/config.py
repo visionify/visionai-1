@@ -17,7 +17,9 @@ SCENARIOS_SCHEMA = ROOT / 'config' / 'scenario-schema.json'
 SCENARIOS_URL = "https://raw.githubusercontent.com/visionify/visionai-scenarios/main/scenarios.json"
 
 # Triton server
-TRITON_HTTP_URL = 'localhost:8000'
+TRITON_HTTP_URL = 'http://localhost:8000'
+TRITON_GRPC_URL = 'grpc://localhost:8001'
+
 TRITON_SERVER_DOCKER_IMAGE = 'nvcr.io/nvidia/tritonserver:22.12-py3'
 TRITON_SERVER_EXEC = 'tritonserver'
 TRITON_SERVER_COMMAND = 'tritonserver --model-repository=/models'

@@ -1,11 +1,5 @@
 import os
 import sys
-import argparse
-from pathlib import Path
-import numpy as np
-from PIL import Image
-import cv2
-
 from pathlib import Path
 
 FILE = Path(__file__).resolve()
@@ -15,18 +9,26 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
-from util.general import print_args, WorkingDirectory, LOGGER, select_device, check_requirements
-from models.common import AutoShape, Yolov5Triton
-
 def yolov5_triton(url, model_name):
+
+    from models.common import AutoShape, Yolov5Triton
+    from util.general import LOGGER, check_requirements
+    from util.image_utils import select_device
+
     device = select_device()
     LOGGER.info(f'Using {url} as Triton inference server. Model name {model_name}')
-    check_requirements('tritonclient[all]')
+    check_requirements('tritonclient[all]', install=True)
+
     model = Yolov5Triton(url=url, model_name=model_name)
     model = AutoShape(model)    # Add nms, auto-scaling results
     return model.to(device)
 
 if __name__ == '__main__':
+
+    import cv2
+    import numpy as np
+    from PIL import Image
+    from util.general import WorkingDirectory
 
     # Model
     model_smoke = yolov5_triton(url='http://localhost:8000', model_name='smoke-and-fire-detection')
@@ -42,15 +44,16 @@ if __name__ == '__main__':
             'data/images/zidane.jpg',  # filename
             Path('data/images/zidane.jpg'),  # Path
             'https://ultralytics.com/images/zidane.jpg',  # URI
-            cv2.imread('data/images/bus.jpg')[:, :, ::-1],  # OpenCV
-            Image.open('data/images/person-helmet.jpg'),  # PIL
+            # cv2.imread('data/images/bus.jpg')[:, :, ::-1],  # OpenCV
+            # Image.open('data/images/person-helmet.jpg'),  # PIL
             np.zeros((320, 640, 3))]  # numpy
 
         # Inference
         for idx, img in enumerate(imgs):
             results = model_smoke(img, size=640)  # batched inference
             results.print()
-            results.save()
+            results.show()
+            # results.save()
 
             # results = model_ppe(img, size=640)  # batched inference
             # results.print()
