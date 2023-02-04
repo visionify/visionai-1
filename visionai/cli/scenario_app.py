@@ -89,28 +89,26 @@ def scenario_list():
 
 @scenario_app.command('download')
 def scenario_download(
-    scenario: str=typer.Option('all', help='scenario name'),
-    world: bool=typer.Option(False, help='Download all public scenarios available')
+    name: str
     ):
     '''
     Download models for scenarios
 
-    --scenario [NAME] : specify scenario to download.
-    --scenario [all]  : download all scenarios configured for the system.
-    --scenarios[world]: download all available scenarios.
+
+    Ex: visionai scenario download ppe-detection  # download ppe-detection scenario
+    Ex: visionai scenario download all            # download all configured scenarios for the org
+    Ex: visionai scenario download world          # download all available scenarios
 
     Download models for a given scenario, or download models for
     all scenarios that have been configured.
     '''
 
-    print(f'Downloading scenarios : {scenario}')
-
     # Get list of available scenarios.
     res = requests.get(SCENARIOS_URL)
     all_scenarios = res.json()['scenarios']
 
-
-    if world is True:
+    if name.lower() == 'world':
+        print(f'Downloading scenarios : world')
         yN = prompt.Confirm.ask('Are you sure you want to download all scenarios? This may take a lot of space!')
         if yN is True:
             num_scenarios = len(all_scenarios)
@@ -121,7 +119,8 @@ def scenario_download(
         else:
             raise typer.Exit()
 
-    if scenario == 'all':
+    if name.lower() == 'all':
+        print(f'Downloading scenarios : all')
         model_names = set()
 
         if not os.path.exists(CONFIG_FILE):
@@ -162,7 +161,7 @@ def scenario_download(
             if scen_url is None:
                 continue
 
-            if scen_name == scenario:
+            if scen_name == name:
                 print(f'Model: {scen_name}: {scen_url}')
                 safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
                 break
@@ -173,7 +172,7 @@ def scenario_download(
 
 @scenario_app.command('test')
 def scenario_test(
-    name:str = typer.Option(..., help='scenario name to test'),
+    name:str,
     camera: str = typer.Option('0', help='Camera name (default is webcam)')
     ):
     '''
@@ -227,7 +226,7 @@ def scenario_test(
         print(f'Download models and restart model-server')
         print(f'[magenta]visionai models stop[/magenta]')
         print(f'[magenta]visionai scenario download {name}[/magenta]')
-        print(f'[magenta]visionai models start[/magenta]')
+        print(f'[magenta]visionai models serve[/magenta]')
         print(f'[magenta]visionai scenario test {name} [/magenta]')
         raise typer.Exit()
     else:
@@ -266,4 +265,6 @@ if __name__ == '__main__':
     # scenario_add('smoke-and-fire', 'TEST-999')
     # scenario_download(world=True)
 
-    scenario_test(name='smoke-and-fire-detection', camera=0)
+    scenario_download('all')
+
+    # scenario_test(name='smoke-and-fire-detection', camera=0)

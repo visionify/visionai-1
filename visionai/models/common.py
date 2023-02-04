@@ -299,6 +299,7 @@ class Detections:
                 key = cv2.waitKey(5)
                 if key == 27:
                     import sys
+                    print('Exiting.')
                     sys.exit(0)
 
             if save:
@@ -317,7 +318,6 @@ class Detections:
                 LOGGER.info(f'Saved results to {save_dir}\n')
             return crops
 
-    @TryExcept('Showing images is not supported in this environment')
     def show(self, labels=True):
         self._run(show=True, labels=labels)  # show results
 
