@@ -124,6 +124,11 @@ Starting early-smoke-and-fire-detection
 
 ```
 
+## Install **Web App**
+Use `visionai install web` command to install webapp. It will clone latest docker image from docker hub `visionify/visionaiweb`. Use `visionai web --help` for to get insigt about webapp.
+
+
+
 ## Next **steps**
 
 Congratulations! You have successfully run the first scenario. Now go through [Tutorials](tutorials/index.md) to learn about how to run multiple scnearios, how to configure each scenario for the events you need, how to set up the dependencies etc.
