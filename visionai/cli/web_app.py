@@ -28,6 +28,7 @@ def web_install():
         print("Installing webservice....")
         client = docker.from_env()
         docker_image_pull_with_progress(client, WEB_SERVICE_DOCKER_HUB_IMAGE)
+        print("Webservice installed successfully")
     except NotFound as e:
         message = typer.style(e, fg=typer.colors.WHITE, bg=typer.colors.RED)
         typer.echo(message)
@@ -94,7 +95,7 @@ def web_stop(web: str=None):
         web_service_container.stop()
         web_service_container.remove()
     except NotFound :
-        message = typer.style(f"No webservice container is running", fg=typer.colors.WHITE, bg=typer.colors.RED)
+        message = typer.style(f"Web-server not running", fg=typer.colors.WHITE, bg=typer.colors.RED)
         typer.echo(message)
 
 
@@ -126,7 +127,7 @@ def web_status(
         typer.echo(web_service_port_message)
 
     except NotFound:
-        message = typer.style(f"No webservice container is running", fg=typer.colors.WHITE, bg=typer.colors.RED)
+        message = typer.style(f"Web-server not running", fg=typer.colors.WHITE, bg=typer.colors.RED)
         typer.echo(message)
 
 
@@ -142,6 +143,6 @@ def callback():
     pass
 
 if __name__ == '__main__':
-    # web_app()
+    web_app()
 
-    web_install()
+    # web_install()
