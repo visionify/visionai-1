@@ -23,21 +23,21 @@ app = typer.Typer()
 app.add_typer(auth_app, name='auth')
 
 app.add_typer(device_app, name='device')
-app.add_typer(device_app, name='devices')
+app.add_typer(device_app, name='devices', help='... alias for device')
 
 app.add_typer(scenario_app, name='scenario')
-app.add_typer(scenario_app, name='scenarios')
+app.add_typer(scenario_app, name='scenarios', help='... alias for scenario')
 
 app.add_typer(camera_app, name='camera')
-app.add_typer(camera_app, name='cameras')
+app.add_typer(camera_app, name='cameras', help='... alias for camera')
 
 app.add_typer(web_app, name='web')
 
 app.add_typer(pipeline_app, name='pipeline')
-app.add_typer(pipeline_app, name='pipelines')
+app.add_typer(pipeline_app, name='pipelines', help='... alias for pipeline')
 
 app.add_typer(models_app, name='model')
-app.add_typer(models_app, name='models')
+app.add_typer(models_app, name='models', help='... alias for model')
 
 # Single-source for version
 import pkg_resources
@@ -49,14 +49,14 @@ except:
 
 __verbose__ = False
 
-''' Enable verbose logging '''
 def verbose_callback(value: bool):
+    ''' Enable verbose logging '''
     if value:
         print('Enabling verbose logging')
         __verbose__ = True
 
-''' Print version & exit '''
 def version_callback(value: bool):
+    ''' Print version & exit '''
     if value:
         print(f'VisionAI Toolkit Version: {__version__}')
         raise typer.Exit()
