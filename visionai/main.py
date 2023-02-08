@@ -31,7 +31,8 @@ app.add_typer(scenario_app, name='scenarios', help='... alias for scenario')
 app.add_typer(camera_app, name='camera')
 app.add_typer(camera_app, name='cameras', help='... alias for camera')
 
-app.add_typer(web_app, name='web')
+app.add_typer(web_app, name='ui')
+app.add_typer(web_app, name='web', help='... alias for ui')
 
 app.add_typer(pipeline_app, name='pipeline')
 app.add_typer(pipeline_app, name='pipelines', help='... alias for pipeline')

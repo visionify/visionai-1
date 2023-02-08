@@ -121,7 +121,7 @@ def web_status(
 @web_app.callback()
 def callback():
     '''
-    Web application for managing cameras, pipelines & scenarios.
+    Start/stop web-app
 
     Start and stop the VisionAI web-app which can be a more
     intuitive way of managing cameras, pipelines and scenarios.
