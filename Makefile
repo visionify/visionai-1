@@ -55,10 +55,10 @@ test.safety:                        ## Safety check
 	docker-compose run --rm server bash -c "python vendor/bin/safety check"
 
 ## PACKAGE:
-package.build:
+package.build:                      ## Build package
 	docker-compose build packageserver
 
-package.test:
+package.test:                       ## Test package
 	docker-compose run --rm packageserver bash -c "python -m pytest"
 
 test.run:                           ## Run all test cases on test-server
