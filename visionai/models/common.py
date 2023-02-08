@@ -343,6 +343,7 @@ class Detections:
             setattr(new, k, [pd.DataFrame(x, columns=c) for x in a])
         return new
 
+
     def tolist(self):
         # return a list of Detections objects, i.e. 'for result in results.tolist():'
         r = range(self.n)  # iterable

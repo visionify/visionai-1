@@ -1,4 +1,5 @@
 import docker
+from rich import print
 from rich.console import Console
 from rich.columns import Columns
 from rich.panel import Panel
@@ -259,7 +260,7 @@ class TritonClient():
         '''
 
         if self.get_container_by_image_name(TRITON_SERVER_EXEC) is not None:
-            print('ERROR: Model server already running!')
+            print('Model server already running!')
             return
 
         try:
@@ -304,9 +305,16 @@ class TritonClient():
                 # Attach triton_client
                 self.init_triton_client()
                 if self.triton_client is None:
-                    print(f'[{init_idx}/{10}] Triton client init.')
-                    init_complete = False
-                    continue
+
+                    # Check if container still present:
+                    triton_container = self.get_container_by_image_name(TRITON_SERVER_EXEC)
+                    if triton_container is None:
+                        print('Container start failed.')
+                        break
+
+                    else:
+                        print(f'[{init_idx}/{10}] Triton client init.')
+                        continue
 
                 else:
                     init_complete = True
@@ -317,7 +325,13 @@ class TritonClient():
                 print('Triton client initialized.')
                 return True
             else:
-                print('Error with triton client initialization. Giving up after 10 retries')
+                print('[red]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[/red]')
+                print('[red]Error with starting triton container. (Likely one of the models is corrupt)[/red]')
+                print()
+                print('[magenta]Ensure the following command is successful:[/magenta]')
+                models_repo_path = ROOT / 'models-repo'
+                print(f'[magenta]docker run -it -p 8000:8000 -p 8001:8001 -p 8002:8002 -v {models_repo_path}:/models nvcr.io/nvidia/tritonserver:22.12-py3 tritonserver --model-repo /models[/magenta]')
+                print('[red]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -[/red]')
                 return False
 
         except Exception as ex:

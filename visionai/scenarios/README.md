@@ -88,26 +88,6 @@ The JSON file is organized as an array of scenarios. Each scenario can have all 
 
 We thought about controlling this information through a DB/redis approach, but the problem was a good version control availability. With a JSON file, the size can increase and make it unreadable - but it would provide much better version control. Later we plan to add to add more tools that would make it easier to get just individual scenarios, scenarios by categories etc. All of these would be auto-generated files based on a single-source-of-truth.
 
-## Changelog
+## Next steps
 
-### **0.0.3** (January 27, 2023)
-
-- Added support for the following scenarios
-- smoke-and-fire-detection 0.0.4
-- ppe-detection 0.0.4
-- smoking-detection 0.0.2
-- phone-detection 0.0.2 (including pictures)
-- rust-and-corrosion 0.0.2
-
-### **0.0.2** (January 27, 2023)
-
-- Updated to have options for more than one models.
-- Model links now include zip files.
-- Each zip file contains model file, config.pbtxt, labels.txt
-- Each model is tested & can be served through triton
-
-
-### **0.0.1** (January 25, 2023)
-
-- Initial version
-- Added initial models for smoke & fire, ppe detection
+- TODO: Create a scenario-browser web-app which allows you to browse & search through all scenarios.

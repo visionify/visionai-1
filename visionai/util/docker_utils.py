@@ -63,7 +63,7 @@ def docker_container_run(
         container_type = 'NVIDIA Runtime + GPU'
     except Exception as ex:
         ctainer = None
-        print('Model-server with NVIDIA runtime & GPUs failed')
+        print('.... Failed.')
 
     if ctainer is None:
         print('Try model-server without NVIDIA runtime + CPUs')
@@ -85,7 +85,7 @@ def docker_container_run(
             container_type = 'NVIDIA Runtime + CPU'
         except Exception as ex:
             ctainer = None
-            print('Model-server with NVIDIA runtime + CPU failed')
+            print('.... Failed.')
 
     if ctainer is None:
         print('Try model-server with default runtime + CPU')
@@ -106,12 +106,13 @@ def docker_container_run(
             container_type = 'Default Runtime + CPU'
         except Exception as ex:
             ctainer = None
-            print('Model-server with default runtime + CPU failed.')
+            print('.... Failed.')
 
     if ctainer is None:
         print('ERROR: Giving up.')
         return None
     else:
+        print('.... Success.')
         print(f'Started model server successfully: {container_type}')
         return ctainer
 
