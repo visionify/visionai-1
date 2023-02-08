@@ -16,7 +16,7 @@ class FaceBlur(Scenario):
     def __init__(self, scenario_name, camera_name=0, events=None, triton_url=TRITON_HTTP_URL):
 
         from models.triton_client_yolov5 import yolov5_triton
-        self.model = yolov5_triton(triton_url, scenario_name)
+        self.model = yolov5_triton(triton_url, 'yolov5s-face')
         super().__init__(scenario_name, camera_name, events, triton_url)
 
 
