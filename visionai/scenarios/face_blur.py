@@ -1,5 +1,7 @@
 from rich import print
 import time
+import pybboxes as pbx
+
 
 import sys
 from pathlib import Path
@@ -52,11 +54,15 @@ class FaceBlur(Scenario):
 
             # Detect Faces
             results = self.model(frame, size=640)  # batched inference
-            results.print()
-            results.show()
-            for result in results.tolist():
-                print(result)
+            for box in results.xyxy[0]:
+                xB = int(box[2])
+                xA = int(box[0])
+                yB = int(box[3])
+                yA = int(box[1])
+                cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 0, 0), -1)
 
+            results.show()
+            
             # if result contains people but PPE are not detected - then fire an event.
             # For now fire-an-event == print the event details.
 
