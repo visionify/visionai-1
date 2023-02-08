@@ -94,7 +94,6 @@ def scenario_download(
     '''
     Download models for scenarios
 
-
     Ex: visionai scenario download ppe-detection  # download ppe-detection scenario
     Ex: visionai scenario download all            # download all configured scenarios for the org
     Ex: visionai scenario download world          # download all available scenarios
@@ -177,7 +176,7 @@ def scenario_download(
                 safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
                 download_success = True
                 break
-        
+
         if download_success is False:
             print(f'ERROR: Unable to find scenario: {name}')
 

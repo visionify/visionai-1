@@ -54,14 +54,15 @@ class TestInvokeCliScenario(unittest.TestCase):
     def test_download_all_scenarios(self):
         # download all scenarios
         output = invoke_cmd(f'{VISIONAI_EXEC} scenario download all')
-        assert 'Downloading scenarios : all' in output
+        assert 'Downloading all configured scenarios' in output
 
     # This requires a prompt from user. Skipping it in unit-tests.
     # @WorkingDirectory(PKGDIR)
     # def test_download_world_scenarios(self):
-    #     # download world scenarios
+    #     # download all scenarios
     #     output = invoke_cmd(f'{VISIONAI_EXEC} scenario download world')
-    #     assert 'Downloading scenarios : world' in output
+    #     assert 'Downloading all available (world) scenarios' in output
+
 
 if __name__ == '__main__':
     unittest.main()
