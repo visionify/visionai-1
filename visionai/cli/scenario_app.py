@@ -103,12 +103,20 @@ def scenario_download(
     all scenarios that have been configured.
     '''
 
-    # Get list of available scenarios.
-    res = requests.get(SCENARIOS_URL)
-    all_scenarios = res.json()['scenarios']
+    # Get the latest scenarios file
+    # Use the local file if available.
+    local_scenario_file = ROOT / 'config' / 'scenario-schema.json'
+    if os.path.exists(local_scenario_file):
+        with open(local_scenario_file, 'r') as f:
+            all_scenarios = json.load(f)['scenarios']
+    else:
+        res = requests.get(SCENARIOS_URL)
+        all_scenarios = res.json()['scenarios']
+        with open(local_scenario_file, 'w') as f:
+            json.dump(all_scenarios, f, indent=4)
 
     if name.lower() == 'world':
-        print(f'Downloading scenarios : world')
+        print(f'Downloading all available (world) scenarios')
         yN = prompt.Confirm.ask('Are you sure you want to download all scenarios? This may take a lot of space!')
         if yN is True:
             num_scenarios = len(all_scenarios)
@@ -120,7 +128,7 @@ def scenario_download(
             raise typer.Exit()
 
     if name.lower() == 'all':
-        print(f'Downloading scenarios : all')
+        print(f'Downloading all configured scenarios')
         model_names = set()
 
         if not os.path.exists(CONFIG_FILE):
@@ -154,6 +162,9 @@ def scenario_download(
                     safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
 
     else:
+        print(f'Downloading models for scenario: {name}')
+        download_success = False
+
         # If a single scenario name is specified.
         for scen in all_scenarios:
             scen_name = scen['name']
@@ -164,7 +175,12 @@ def scenario_download(
             if scen_name == name:
                 print(f'Model: {scen_name}: {scen_url}')
                 safe_download_to_folder(scen_url, MODELS_REPO, overwrite=False)
+                download_success = True
                 break
+        
+        if download_success is False:
+            print(f'ERROR: Unable to find scenario: {name}')
+
 
     # Done downloading models.
     print('Done.')
@@ -275,9 +291,10 @@ if __name__ == '__main__':
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
     # scenario_add('smoke-and-fire', 'TEST-999')
     # scenario_download(world=True)
+    scenario_download('face-blur')
 
     # scenario_download('all')
 
     # scenario_test(name='smoke-and-fire-detection', camera=0)
 
-    scenario_test(name='face-blur', camera=0)
+    # scenario_test(name='face-blur', camera=0)
