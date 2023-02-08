@@ -27,10 +27,8 @@ TRITON_MODELS_REPO = ROOT / 'models-repo'
 
 # Web service
 WEB_SERVICE_REPO_URL = "https://github.com/sumanthvisionify/microsoft_managed_web_app_demo.git" #sample one we need to change this
-WEB_SERVICE_DOCKER_IMAGE = 'visionaiwebapp.azurecr.io/visionaiwebapp:129'
 WEB_SERVICE_DOCKER_HUB_IMAGE = 'visionify/visionaiweb'
-WEB_SERVICE_PORT = 80
-
+WEB_SERVICE_PORT = 3001
 
 
 # Test stuff

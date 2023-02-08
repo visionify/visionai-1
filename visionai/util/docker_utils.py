@@ -12,6 +12,7 @@ def docker_image_pull_with_progress(client, image_name):
         elif line['status'] == 'Extracting':
             id = f'[green][Extract  {line["id"]}]'
         else:
+            print(line)
             # skip other statuses
             return
 

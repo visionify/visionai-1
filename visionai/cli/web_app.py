@@ -1,6 +1,6 @@
 import typer
 from rich import print
-from config import WEB_SERVICE_DOCKER_HUB_IMAGE
+from config import WEB_SERVICE_DOCKER_HUB_IMAGE, WEB_SERVICE_PORT
 import docker
 from docker.errors import *
 from rich.console import Console
@@ -35,7 +35,7 @@ def web_install():
 
 @web_app.command('start')
 def web_start(
-    port: int = typer.Option(8000, help='Port', prompt=True)):
+    port: int = typer.Option(WEB_SERVICE_PORT, help='Port')):
     '''
     Start web server
 
@@ -46,13 +46,25 @@ def web_start(
     '''
     try:
         print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
-        print(f'Starting web server with port {port}')
+
+        # check if already running
+        client = docker.from_env()
+        containers = client.containers.list()
+        for container in containers:
+            if container.name == 'visionai-web':
+                print(f'Web server already running at: http://localhost:{port}')
+                return
+
+        # start web server
+        print(f'Starting web server at port {port}')
         client = docker.from_env()
         client.containers.run(
             WEB_SERVICE_DOCKER_HUB_IMAGE,
             ports={80:port},
             detach=True,
             name='visionai-web')
+        print(f'Web server available at: http://localhost:{port}')
+
     except NotFound as e:
         print(e)
         message = typer.style(e, fg=typer.colors.WHITE, bg=typer.colors.RED)
@@ -89,7 +101,7 @@ def web_stop(web: str=None):
 
 @web_app.command('status')
 def web_status(
-    tail: int = typer.Option(20, help='tail number of lines', prompt=True)
+    tail: int = typer.Option(20, help='tail number of lines')
     ):
     '''
     Web service status
@@ -130,4 +142,6 @@ def callback():
     pass
 
 if __name__ == '__main__':
-    web_app()
+    # web_app()
+
+    web_install()
