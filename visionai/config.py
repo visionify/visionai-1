@@ -15,7 +15,6 @@ CONFIG_FOLDER = ROOT / 'config'
 CONFIG_FILE = ROOT / 'config' / 'config.json'
 SCENARIOS_SCHEMA = ROOT / 'config' / 'scenario-schema.json'
 SCENARIOS_URL = "https://github.com/visionify/visionai/blob/main/visionai/scenarios/scenarios.json"
-SCENARIOS_URL = "https://raw.githubusercontent.com/visionify/visionai-scenarios/main/scenarios.json" #TODO: Remove this once merged.
 
 # Triton server
 TRITON_HTTP_URL = 'http://localhost:8000'
