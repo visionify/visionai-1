@@ -347,8 +347,8 @@
                     "recall": 94.67,
                     "f1": 94.67,
                     "datasetSize": 393703,
-                    "model_url": "https://workplaceos.blob.core.windows.net/models/yolov5s-face/yolov5s-face-0.0.4.zip",
-                    "model_hash": "9c4ff4240f6f15237f007f5b927818c1"
+                    "model_url": "https://workplaceos.blob.core.windows.net/models/yolov5s-face/yolov5s-face-0.0.5.zip",
+                    "model_hash": "903533ef050ff2def8b11b0cb8c58e3d"
                 },
                 "other": [
                     {
