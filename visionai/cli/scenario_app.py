@@ -188,8 +188,17 @@ def scenario_test(
     from models.triton_client import TritonClient
 
     # Get the latest scenarios file
-    res = requests.get(SCENARIOS_URL)
-    all_scenarios = res.json()['scenarios']
+    # Use the local file if available.
+    local_scenario_file = ROOT / 'config' / 'scenario-schema.json'
+    if os.path.exists(local_scenario_file):
+        with open(local_scenario_file, 'r') as f:
+            all_scenarios = json.load(f)['scenarios']
+    else:
+        res = requests.get(SCENARIOS_URL)
+        all_scenarios = res.json()['scenarios']
+        with open(local_scenario_file, 'w') as f:
+            json.dump(all_scenarios, f, indent=4)
+
     scenario_to_test = None
     for scen in all_scenarios:
         if scen['name'] == name:
@@ -212,9 +221,11 @@ def scenario_test(
 
     # Check if the specified scenario model is running.
     model_to_test_available = False
+    model_name = scenario_to_test['models']['latest']['name']
+
     model_list = tc.get_models()
     for model_item in model_list:
-        if model_item['name'] == name:
+        if model_item['name'] == model_name:
             model_to_test_available = True
             break
 
@@ -259,7 +270,7 @@ def callback():
 
 if __name__ == '__main__':
     # scenario_app()
-    scenario_list()
+    # scenario_list()
 
     # scenario_remove('smoke-and-fire-detection', 'TEST-999')
     # scenario_add('smoke-and-fire', 'TEST-999')
@@ -268,3 +279,5 @@ if __name__ == '__main__':
     # scenario_download('all')
 
     # scenario_test(name='smoke-and-fire-detection', camera=0)
+
+    scenario_test(name='face-blur', camera=0)

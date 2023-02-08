@@ -13,11 +13,20 @@ from scenarios import Scenario
 from config import TRITON_HTTP_URL
 
 class FaceBlur(Scenario):
-    def __init__(self, scenario_name, camera_name=0, events=None, triton_url=TRITON_HTTP_URL):
+    def __init__(self, scenario_name='face-blur', camera_name=0, events=None, triton_url=TRITON_HTTP_URL):
 
         from models.triton_client_yolov5 import yolov5_triton
         self.model = yolov5_triton(triton_url, 'yolov5s-face')
         super().__init__(scenario_name, camera_name, events, triton_url)
+
+    # API that face_blur module exports. Use it like this:
+    # from scenario.face_blur import FaceBlur
+    # fb = FaceBlur()
+    # out_img = fb.blur_faces(img)  # provide cv2 image.
+    def blur_faces(self, img):
+        import cv2
+        results = self.model(img, size=640)
+
 
 
     def start(self, camera_name=0):
@@ -45,10 +54,15 @@ class FaceBlur(Scenario):
             results = self.model(frame, size=640)  # batched inference
             results.print()
             results.show()
+            for result in results.tolist():
+                print(result)
+
             # if result contains people but PPE are not detected - then fire an event.
             # For now fire-an-event == print the event details.
 
             # if stop_evt is set, then break
             if self.stop_evt.is_set():
                 break
+
+
 
