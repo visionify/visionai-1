@@ -1,9 +1,9 @@
 import docker
-import tritonclient.http
 from rich.console import Console
 from rich.columns import Columns
 from rich.panel import Panel
 import time
+from urllib.parse import urlparse
 
 import sys
 from pathlib import Path
@@ -40,7 +40,9 @@ class TritonClient():
     def init_triton_client(self):
         # Triton client
         try:
-            self.triton_client = tritonclient.http.InferenceServerClient(url=TRITON_HTTP_URL)
+            import tritonclient.http
+            parsed_url = urlparse(TRITON_HTTP_URL)
+            self.triton_client = tritonclient.http.InferenceServerClient(url=parsed_url.netloc)
             self.triton_client.get_server_metadata()
         except Exception as ex:
             self.triton_client = None
@@ -233,7 +235,6 @@ class TritonClient():
         else:
             return self.triton_client.get_model_repository_index()
 
-
     def print_models_served(self):
         '''
         Print models being served by triton server
@@ -262,8 +263,18 @@ class TritonClient():
             return
 
         try:
+            print('Pulling docker image (this may take a while)')
+            from util.docker_utils import docker_image_pull_with_progress, docker_container_run
+
+            # Stream progress message while pulling the docker image.
+            docker_image_pull_with_progress(self.docker_client, image_name=TRITON_SERVER_DOCKER_IMAGE)
+            print('Done.')
+
+            # Try starting docker container with NVIDIA runtime,
+            # If that is not available - then start the container with regular runtime
             print('Starting model server')
-            self.docker_client.containers.run(
+            docker_container_run(
+                client=self.docker_client,
                 image=TRITON_SERVER_DOCKER_IMAGE,   # image name
                 command=TRITON_SERVER_COMMAND,      # command to run in container
                 stdout=False,                       # disable logs
@@ -271,27 +282,44 @@ class TritonClient():
                 detach=True,                        # detached mode - daemon
                 remove=True,                        # remove fs after exit
                 auto_remove=True,                   # remove fs if container fails
-                runtime='nvidia',                   # Use nvidia-container-runtime
                 device_requests=[                   # similar to --gpus=all ??
                     docker.types.DeviceRequest(capabilities=[['gpu']])
                     ],
-                network_mode='host',                # --net=host
+                # network_mode='host',                # --net=host
                 volumes=                            # -v
-                    [f'{TRITON_MODELS_REPO}:/models']
+                    [f'{TRITON_MODELS_REPO}:/models'],
+                ports={
+                    '8000': 8000,
+                    '8001': 8001,
+                    '8002': 8002
+                }
             )
 
-            # sleep a bit
-            time.sleep(3)
+            init_complete = False
+            init_idx = 0
+            for init_idx in range(1,11):
+                # sleep a bit
+                time.sleep(1)
 
-            # Attach triton_client
-            self.init_triton_client()
-            if self.triton_client is None:
-                print('ERROR: Unable to connect to triton client')
+                # Attach triton_client
+                self.init_triton_client()
+                if self.triton_client is None:
+                    print(f'[{init_idx}/{10}] Triton client init.')
+                    init_complete = False
+                    continue
+
+                else:
+                    init_complete = True
+                    break
+
+            if init_complete is True:
+                # Everything looks good
+                print('Triton client initialized.')
+                return True
+            else:
+                print('Error with triton client initialization. Giving up after 10 retries')
                 return False
 
-            # Everything looks good
-            print('Done.')
-            return True
         except Exception as ex:
             print('ERROR: Trying to start model server.')
             print(f'Exception: {ex}')

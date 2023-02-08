@@ -2,8 +2,25 @@
 
 ## VisionAI Changelog
 
+### **0.1.15** <small>February 7, 2023</small>
 
-### **0.1.12** <small>January 27, 2023</small>
+- 🐛 On linux we were using incorrect nvidia_smi package.
+- 🎨 Add support for common spelling errors during commands (like scenarios instead of scenario)
+- 🚚 Move scenario.json file to this repo - so everything is in one place.
+
+
+
+### **0.1.14** <small>February 3, 2023</small>
+
+- ✨ Support for `visionai scenario test` command.
+- ✨ Support for Triton server running on MacOS (tested)
+- 🔥 Simplified scenario command names (don't have to specify --name anymore)
+- 📝 Renamed all cli files to _app - to avoid confusion between models.py & models/ module.
+- 📝 Move add-scenario and remove-scenario to camera module (these are camera operations.)
+- 🔥 Show nice progress bar while any docker image is being pulled.
+- 🧪 Added results.show() method to detection that uses cv2.imshow() to show the results locally.
+
+### **0.1.12** <small>January 31, 2023</small>
 
 - ✨ Support for managing triton server
 - 🎨 Start/stop triton server from CLI.

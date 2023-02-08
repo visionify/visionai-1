@@ -1,41 +1,56 @@
-## The simplest example
+## How it works
 
-The simplest **Typer** file could look like this:
+The simplest way to get your hands on VisionAI application is through install it through PyPI.
 
-```Python
-{!../docs_src/first_steps/tutorial001.py!}
+```bash
+pip install visionai
 ```
 
-Copy that to a file `main.py`.
+This should install all the depdendencies. Some of the dependencies are big in size (PyTorch, Docker, OpenCV etc) - so please wait for a few minutes before the installation completes.
 
-Test it:
+Once it is installed - you can test it out.
 
 <div class="termy">
 
 ```console
-$ python main.py
+$ visionai --help
 
-Hello World
 
-// It just prints "Hello World".
+ Usage: visionai [OPTIONS] COMMAND [ARGS]...
 
-// Now check the --help
-$ python main.py --help
+ VisionAI Toolkit
+ VisionAI tookit provides a large number of ready-to-deploy scenarios built
+ using latest computer vision frameworks. Supports many of the common
+ workplace health and safety use-cases.
+ Start by exploring scenarios through visionai scenario list command. After
+ that, you can create a pipeline through the pipeline commands. Once a
+ pipeline is configured, you can run the pipeline on the any number of
+ cameras.
+ Running the toolkit does assume a NVIDIA GPU powered machine for efficient
+ performance. Please see the system requirements on the documentation.
+ You can instead opt to install it through Azure Managed VM, with
+ preconfigured machines & recommended hardware support. You can find
+ information about this on our documentation website.
+ Visit https://docs.visionify.ai for more details.
 
-<b> </b><font color="#F4BF75"><b>Usage: </b></font><b>main.py [OPTIONS]                            </b>
-<b>                                                     </b>
-<font color="#A5A5A1">╭─ Options ─────────────────────────────────────────╮</font>
-<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--install-completion</b></font>          Install completion  │
-<font color="#A5A5A1">│                               for the current     │</font>
-<font color="#A5A5A1">│                               shell.              │</font>
-<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--show-completion</b></font>             Show completion for │
-<font color="#A5A5A1">│                               the current shell,  │</font>
-<font color="#A5A5A1">│                               to copy it or       │</font>
-<font color="#A5A5A1">│                               customize the       │</font>
-<font color="#A5A5A1">│                               installation.       │</font>
-<font color="#A5A5A1">│ </font><font color="#A1EFE4"><b>--help</b></font>                        Show this message   │
-<font color="#A5A5A1">│                               and exit.           │</font>
-<font color="#A5A5A1">╰───────────────────────────────────────────────────╯</font>
+╭─ Options ────────────────────────────────────────────────────────────────╮
+│ --verbose                                                                │
+│ --version                                                                │
+│ --install-completion          Install completion for the current shell.  │
+│ --show-completion             Show completion for the current shell, to  │
+│                               copy it or customize the installation.     │
+│ --help                        Show this message and exit.                │
+╰──────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────╮
+│ auth              Authorization (logging in/out)                         │
+│ camera            Manage cameras                                         │
+│ device            Manage device features                                 │
+│ models            Serve models                                           │
+│ pipeline          Manage pipelines                                       │
+│ scenario          Manage scenarios                                       │
+│ web               Web functions                                          │
+╰──────────────────────────────────────────────────────────────────────────╯
+
 ```
 
 </div>

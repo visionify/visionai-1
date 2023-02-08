@@ -12,17 +12,34 @@ if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
+# Initialize configuration (one-time)
+from config import init_config
+init_config()
+
+# CLI modules
 from cli import scenario_app, camera_app, web_app, auth_app, device_app, pipeline_app, models_app
 
 app = typer.Typer()
 app.add_typer(auth_app, name='auth')
+
 app.add_typer(device_app, name='device')
+app.add_typer(device_app, name='devices')
+
 app.add_typer(scenario_app, name='scenario')
+app.add_typer(scenario_app, name='scenarios')
+
 app.add_typer(camera_app, name='camera')
+app.add_typer(camera_app, name='cameras')
+
 app.add_typer(web_app, name='web')
+
 app.add_typer(pipeline_app, name='pipeline')
+app.add_typer(pipeline_app, name='pipelines')
+
+app.add_typer(models_app, name='model')
 app.add_typer(models_app, name='models')
 
+# Single-source for version
 import pkg_resources
 
 try:
