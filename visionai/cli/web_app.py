@@ -1,16 +1,15 @@
 import typer
 from rich import print
-from config import WEB_SERVICE_DOCKER_IMAGE,WEB_SERVICE_DOCKER_HUB_IMAGE
+from config import WEB_SERVICE_DOCKER_HUB_IMAGE
 import docker
 from docker.errors import *
 from rich.console import Console
 from rich import print, prompt
 
+from util.docker_utils import docker_image_pull_with_progress
+
 err_console = Console(stderr=True)
-
-
 web_app = typer.Typer()
-
 
 
 # web app
@@ -28,7 +27,7 @@ def web_install():
         print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
         print("Installing webservice....")
         client = docker.from_env()
-        client.images.pull(WEB_SERVICE_DOCKER_HUB_IMAGE,all_tags=False)
+        docker_image_pull_with_progress(client, WEB_SERVICE_DOCKER_HUB_IMAGE)
     except NotFound as e:
         message = typer.style(e, fg=typer.colors.WHITE, bg=typer.colors.RED)
         typer.echo(message)
@@ -49,7 +48,11 @@ def web_start(
         print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
         print(f'Starting web server with port {port}')
         client = docker.from_env()
-        client.containers.run(WEB_SERVICE_DOCKER_IMAGE,ports={80:port},detach=True,name='web')
+        client.containers.run(
+            WEB_SERVICE_DOCKER_HUB_IMAGE,
+            ports={80:port},
+            detach=True,
+            name='visionai-web')
     except NotFound as e:
         print(e)
         message = typer.style(e, fg=typer.colors.WHITE, bg=typer.colors.RED)
@@ -75,18 +78,18 @@ def web_stop(web: str=None):
         print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
         print(f'Stop web server....')
         client = docker.from_env()
-        web_service_container = client.containers.get('web')
+        web_service_container = client.containers.get('visionai-web')
         web_service_container.stop()
         web_service_container.remove()
     except NotFound :
         message = typer.style(f"No webservice container is running", fg=typer.colors.WHITE, bg=typer.colors.RED)
         typer.echo(message)
-    
+
 
 
 @web_app.command('status')
 def web_status(
-    logs: int = typer.Option(5, help='list logs', prompt=True)
+    tail: int = typer.Option(20, help='tail number of lines', prompt=True)
     ):
     '''
     Web service status
@@ -99,11 +102,11 @@ def web_status(
         print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
         print(f'Web service status....')
         client = docker.from_env()
-        web_service_status = client.containers.get('web')
+        web_service_status = client.containers.get('visionai-web')
         web_service_status_message = typer.style(web_service_status.status, fg=typer.colors.WHITE, bg=typer.colors.GREEN)
         typer.echo(web_service_status_message)
 
-        logs = web_service_status.logs(tail=logs)
+        logs = web_service_status.logs(tail=tail)
         log_message= logs.decode("utf-8")
         print(log_message)
 
@@ -118,13 +121,13 @@ def web_status(
 @web_app.callback()
 def callback():
     '''
-    Web functions
+    Web application for managing cameras, pipelines & scenarios.
 
-    A web-app is more intuitive way of configuring scenarios,
-    cameras and pipelines. These routines allow the user
-    to start their own internal development server that
-    can be used for managing scenarios, cameras and pipelines.
-   '''
+    Start and stop the VisionAI web-app which can be a more
+    intuitive way of managing cameras, pipelines and scenarios.
+    Web-app also provides a live-stream view of the cameras.
+    '''
+    pass
 
 if __name__ == '__main__':
     web_app()
