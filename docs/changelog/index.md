@@ -2,6 +2,11 @@
 
 ## VisionAI Changelog
 
+### **0.1.17** <small>February 9, 2023</small>
+
+- ✨ Added support for `visionai web start|stop|status` commands with backend API support.
+
+
 ### **0.1.16** <small>February 8, 2023</small>
 
 - ✨ Support for `visionai web start|stop|status` commands.

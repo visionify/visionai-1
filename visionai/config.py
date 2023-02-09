@@ -16,20 +16,27 @@ CONFIG_FILE = ROOT / 'config' / 'config.json'
 SCENARIOS_SCHEMA = ROOT / 'config' / 'scenario-schema.json'
 SCENARIOS_URL = "https://raw.githubusercontent.com/visionify/visionai/main/visionai/scenarios/scenarios.json"
 
-# Triton server
+# Triton server endpoints
 TRITON_HTTP_URL = 'http://localhost:8000'
 TRITON_GRPC_URL = 'grpc://localhost:8001'
+TRITON_METRICS_URL = 'http://localhost:8002/metrics'
 
 TRITON_SERVER_DOCKER_IMAGE = 'nvcr.io/nvidia/tritonserver:22.12-py3'
 TRITON_SERVER_EXEC = 'tritonserver'
 TRITON_SERVER_COMMAND = 'tritonserver --model-repository=/models'
 TRITON_MODELS_REPO = ROOT / 'models-repo'
 
-# Web service
-WEB_SERVICE_REPO_URL = "https://github.com/sumanthvisionify/microsoft_managed_web_app_demo.git" #sample one we need to change this
-WEB_SERVICE_DOCKER_HUB_IMAGE = 'visionify/visionaiweb'
-WEB_SERVICE_PORT = 3001
+# Web application (front-end)
+WEB_APP_DOCKER_IMAGE = 'visionify/visionaiweb'
+WEB_APP_PORT = 3001
+WEB_APP_CONTAINER_NAME = 'visionai-web'
 
+# Web API (back-end)
+WEB_API_DOCKER_IMAGE = 'visionify/visionai-api'
+WEB_API_PORT = 3002
+WEB_API_MODELS_REPO = ROOT / 'models-repo'
+WEB_API_CONFIG_FOLDER = ROOT / 'config'
+WEB_API_CONTAINER_NAME = 'visionai-api'
 
 # Test stuff
 if os.environ.get('VISIONAI_EXEC') == 'visionai':
