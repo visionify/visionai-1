@@ -2,6 +2,15 @@
 
 ## VisionAI Changelog
 
+### **0.1.17** <small>February 9, 2023</small>
+
+- 📌 Added support for `visionai web start|stop|status` commands with API server support.
+- Ensure We can pull visionify/visionai-api to local machine
+- Run this as a container with model-repo/ and config/ folder shared.
+- Ensure back-to-back stop/start would work.
+- Ensure we can just do `web start` without doing `web install`
+- Removed `web install` as it can cause confusion
+
 ### **0.1.16** <small>February 8, 2023</small>
 
 - ✨ Support for `visionai web start|stop|status` commands.
