@@ -17,18 +17,11 @@ class TestInvokeCliWeb(unittest.TestCase):
     @WorkingDirectory(PKGDIR)
     def test_invoke_web_help_command(self):
         output = invoke_cmd(f'{VISIONAI_EXEC} web --help')
-        assert 'install' in output
+        assert 'install' not in output
         assert 'start' in output
         assert 'status' in output
         assert 'stop' in output
 
-    @WorkingDirectory(PKGDIR)
-    def test_invoke_web_install_command(self):
-        output = invoke_cmd(f'{VISIONAI_EXEC} web install')
-        assert 'Pulling image: ' in output
-        assert 'visionify/visionai-api' in output
-        assert 'visionify/visionaiweb' in output
-        assert 'Webservice installed successfully' in output
 
     @WorkingDirectory(PKGDIR)
     def test_invoke_web_start_stop_status_command(self):

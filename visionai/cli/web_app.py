@@ -19,33 +19,6 @@ from util.docker_utils import docker_image_pull_with_progress
 err_console = Console(stderr=True)
 web_app = typer.Typer()
 
-
-@web_app.command('install')
-def web_install():
-    '''
-    Install the web-app & APIs
-
-    Use this function to pull the docker images for web-app and
-    API server. This is a one-time operation and is required prior to
-    running the web commands.
-    '''
-    try:
-        print('- - - - - - - - - - - - - - - - - - - - - - - - - - -')
-        print(f"Pulling web-app image {WEB_APP_DOCKER_IMAGE}....")
-        client = docker.from_env()
-        docker_image_pull_with_progress(client, WEB_APP_DOCKER_IMAGE)
-
-        print(f"Pulling web-api image {WEB_API_DOCKER_IMAGE}....")
-        client = docker.from_env()
-        docker_image_pull_with_progress(client, WEB_API_DOCKER_IMAGE)
-
-        print("Webservice installed successfully")
-
-    except docker.errors.NotFound as e:
-        message = typer.style(e, fg=typer.colors.WHITE, bg=typer.colors.RED)
-        typer.echo(message)
-
-
 @web_app.command('start')
 def web_start():
     '''
